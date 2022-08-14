@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content
+    %}
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
+    <form method="POST">
+      <h3 aling="center">Login</h3>
+      <div class="form-group">
+        <label for="user_cod">Codigo Usuario</label>
+        <input
+          type="text"
+          class="form-control"
+          id="user_cod"
+          name="user_cod"
+          placeholder="Introduce tu código de usuario"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          placeholder="Introduce tu contraseña"
+        />
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    {% endblock %}

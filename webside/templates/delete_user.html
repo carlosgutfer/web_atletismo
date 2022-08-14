@@ -1,0 +1,42 @@
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
+    content %}
+    <form method="POST">
+      <h3 aling="center">Sign Up</h3>
+      <div class="form-group">
+        <label for="firstName">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          id="firstName"
+          name="firstName"
+          placeholder="Enter first name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="cod_user">Codigo usuario</label>
+        <input
+          type="text"
+          class="form-control"
+          id="cod_user"
+          name="cod_user"
+          placeholder="Enter user cod"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Es necesario que introduzcas tu contraseña para validar, reccuerda que este proceso eliminará todos los registros y es irreversible</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password1"
+          name="password"
+          placeholder="Enter password"
+        />
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary">ELIMINAR USUARIO DEFINITIVAMENTE</button>
+      {% if eliminado%}
+        <br>
+        <h1>EL USUARIO HA SIDO ELIMINADO CORRECTAMENTE</h1>
+      {% endif %}
+    </form>
+    {% endblock %}

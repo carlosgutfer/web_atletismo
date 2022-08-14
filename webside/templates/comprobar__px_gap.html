@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% extends "base.html" %}{% block title %} FILTRADO COCHES para px max y px min {% endblock %} {% block content%}
+ <html>
+
+ <head>
+ 	<title>FILTRADO COCHES PARA px min y px max </title>
+	 <link rel="stylesheet" href="../CSS/mystyle.css">
+
+	 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+ </head>
+
+ <body>
+ 	<form method = "POST" >
+		<fieldset id="main">
+			<legend id="legendMain">Busqueda por px</legend>
+				<br>
+				<div class="form-group">
+				<label for="pieceset_idname">Escribe el nombre o parte del nombre del juego o enrasamiento a buscar</label>
+				<input type="text" class="form-control" id = "pieceset_idname" name = "pieceset_idname" />
+				<br>
+				<label for="pieceset_idname">Introduce el número de px máximo </label>
+				<input type="text" class="form-control" id = "px_gap_max" name = "mm_gap_max" value = 0 />
+				<br>
+				<label for="pieceset_idname">Introduce el número de px mínimo </label>
+				<input type="text" class="form-control" id = "px_gap_min" name = "mm_gap_min" value = 0 />
+				<br>
+				<label for="pieceset_idname">Selecciona el rango de fechas que desea comprobar </label>
+				<br>
+				<input type="text" id = "sesion_date" name="sesion_date" />
+				<br><br>
+				<input type="checkbox" id = "px_max" name  = "px_max" />
+				<label for="px_max">Comprobar px máximo </label>
+				<input type="checkbox" id = "color" name  = "color" />
+				<label for="color">Filtrar por colores</label>
+				<br>
+				<input type="checkbox" id = "px_min" name  = "px_min" />
+				<label for="px_min">Comprobar px mínimo</label>
+				<br>
+				<button type="submit" class="btn btn-primary">BUSCAR</button>
+				</div>
+
+	</form>
+					
+ </body>
+ <canvas id="lineChart" width="900" height="400"></canvas>
+	
+
+ <script>
+	$('#sesion_date').daterangepicker();
+ </script>
+
+
+
+ <!-- Script to show the chart -->
+ <script>
+
+	var ctx = document.getElementById("lineChart").getContext("2d")
+ 	var lineChart = new Chart(ctx, {
+	 type: "bar",
+	 data: 
+	 {
+		 labels:{{labels | safe}},
+		 datasets: [
+			 {
+				 label: "Coches con 0 pixeles",
+				 data: {{values | safe}},
+				 fill: false,
+				 borderCOlor: "rgb(75, 192, 192)",
+				 lineTension: 0.1
+			 }
+		 ]
+	 },
+	 options:
+	 {
+		 Responsive: false
+	 }
+ });
+ </script>
+
+ <!-- script to get daterange -->
+
+	
+
+</html>
+{% endblock %}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% extends "base.html" %}{% block title %} FILTRADO COCHES PARA JE Y JI {% endblock %} {% block content%}
+ <html>
+
+ <head>
+	<link rel="stylesheet" href="../CSS/mystyle.css">
+ 	<title>FILTRADO COCHES PARA JE Y JI </title>
+	 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+ </head>
+
+ <body>
+ 	<form method = "POST" >
+		<fieldset id="main">
+			<legend id="legendMain">Busqueda por rango de fechas</legend>
+				<br>
+				<div class="form-group">
+				
+				<br>
+				<label for="pieceset_idname">Selecciona la fecha de la competición </label>
+				<br>
+				<input type="date" id = "sesion_date" name="sesion_date" />
+				<br><br>
+                <select id = "tipo_prueba" name  = "tipo_prueba"  onchange="myFunction()" >
+
+                    <option>Velocidad </option>
+                    <option>Vallas</option>
+                    <option>Fondo / Medio Fondo</option>
+                    <option>Lanzamientos</option>
+                    <option>Saltos</option>
+                </select>
+                <br><br>
+                <select id = "velocidad" name  = "velocidad" style="display:none;" >
+                    <option>80 </option>
+                    <option>100</option>
+                    <option>300</option>
+                </select>
+                <select id = "Vallas" name  = "Vallas" style="display:none;" >
+                    <option>80v</option>
+                    <option>100v</option>
+                    <option>300v</option>
+                </select>
+                <select id = "FondoMedioFondo" name  = "FondoMedioFondo" style="display:none;" >
+                    <option>600 </option>
+                    <option>1000</option>
+                    <option>3000</option>
+                    <option>milla</option>
+                </select>
+                <select id = "Lanzamientos" name  = "Lanzamientos" style="display:none;" >
+                    <option>Disco</option>
+                    <option>Jabalina</option>
+                    <option>Peso</option>
+                    <option>Martillo</option>
+                </select>
+                <select id = "Saltos" name  = "Saltos" style="display:none;" >
+                    <option>Altura</option>
+                    <option>Longitud</option>
+                    <option>Pértiga</option>
+                    <option>Triple</option>
+                </select>
+
+                <br>
+				<label for="mark" id="informacion" name="informacion">Introduce la marca  </label>
+				<input type="text" class="form-control" id = "mm_gap_max" name = "mm_gap_max" value = 0 />
+				<br>
+				<button type="submit" class="btn btn-primary">BUSCAR</button>
+				</div>
+
+	</form>
+					
+ </body>
+ <canvas id="lineChart" width="900" height="400"></canvas>
+	
+ <script>
+
+    function myFunction() {
+       if (document.getElementById("tipo_prueba").value == "Velocidad")
+       {
+            document.getElementById("velocidad").style.display = "block"
+            document.getElementById("Vallas").style.display = "none"
+            document.getElementById("FondoMedioFondo").style.display = "none"
+            document.getElementById("Lanzamientos").style.display = "none"
+            document.getElementById("Saltos").style.display = "none"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss:dd)"
+       }
+       else if (document.getElementById("tipo_prueba").value == "Vallas")
+       {
+            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Vallas").style.display = "block"
+            document.getElementById("FondoMedioFondo").style.display = "none"
+            document.getElementById("Lanzamientos").style.display = "none"
+            document.getElementById("Saltos").style.display = "none"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss:dd)"
+       }
+       else if (document.getElementById("tipo_prueba").value == "Fondo / Medio Fondo")
+       {
+            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Vallas").style.display = "none"
+            document.getElementById("FondoMedioFondo").style.display = "block"
+            document.getElementById("Lanzamientos").style.display = "none"
+            document.getElementById("Saltos").style.display = "none"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss:dd)"
+       }  
+       else if (document.getElementById("tipo_prueba").value == "Lanzamientos")
+       {
+            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Vallas").style.display = "none"
+            document.getElementById("FondoMedioFondo").style.display = "none"
+            document.getElementById("Lanzamientos").style.display = "block"
+            document.getElementById("Saltos").style.display = "none"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm.cc)"
+       }   
+       else if (document.getElementById("tipo_prueba").value == "Saltos")
+       {
+            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Vallas").style.display = "none"
+            document.getElementById("FondoMedioFondo").style.display = "none"
+            document.getElementById("Lanzamientos").style.display = "none"
+            document.getElementById("Saltos").style.display = "block"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm.cc)"
+       }      
+    }
+ </script>
+
+</html>
+{% endblock %}

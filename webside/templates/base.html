@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="menuPrincipal" >
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+          {% if User_register.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              MARCAS
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/insert_mark">INSERTAR NUEVA MARCA</a>
+              <a class="dropdown-item" href="/px_gap">CONSULTAR TODAS LAS MARCAS</a>
+              <a class="dropdown-item" href="">CONSULTAR TODAS LAS MARCAS POR PRUEBAS</a>
+              <a class="dropdown-item" href="">ELIMINAR MARCA</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              TESTS
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="">INSERTAR NUEVA MARCA DE TEST</a>
+              <a class="dropdown-item" href="">CONSULTAR TODOS LOS TEST</a>
+              <a class="dropdown-item" href="">CONSULTAR TODAS LAS MARCAS POR TEST</a>
+              <a class="dropdown-item" href="">ELIMINAR MARCA DE TEST</a>
+            </div>
+          </li>
+          {% if User_register.admin %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              GRUPOS DE TECNIFICACIÓN
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="">INSERTAR USUARIO</a>
+              <a class="dropdown-item" href="">VER TODOS LOS USUARIOS EN LOS GRUPOS DE TECNIFICACIÓN</a>
+              <a class="dropdown-item" href="">VER USUARIO POR GRUPO</a>
+              <a class="dropdown-item" href="">ELIMINAR DE GRUPO</a>
+            </div>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ADMINISTRAR USUARIOS
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/sing_up">INSERTAR USUARIO</a>
+              <a class="dropdown-item" href="/view_all">VER TODOS LOS USUARIOS</a>
+              <a class="dropdown-item" href="/delete_user">ELIMINAR USUARIO</a>
+            </div>
+          </li>
+          {% endif %}
+          <a class="nav-item nav-link" id="logout" href="/logout">CERRAR SESIÓN</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">{% block content %} {% endblock %}</div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+
+
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='index.js') }}"
+    ></script>
+  </body>
+</html>
