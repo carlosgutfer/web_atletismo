@@ -18,7 +18,7 @@ def home():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                return render_template("comprobar__mm__gap.html", User_register=current_user)
+                return render_template("home.html", User_register=current_user)
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
