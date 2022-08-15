@@ -13,7 +13,7 @@
  </head>
 
  <body>
- 	<form method = "POST" >
+ 	<form id="myform" >
 		<fieldset id="main">
 			<legend id="legendMain">Busqueda por rango de fechas</legend>
 				<br>
@@ -25,15 +25,15 @@
 				<input type="date" id = "sesion_date" name="sesion_date" />
 				<br><br>
                 <select id = "tipo_prueba" name  = "tipo_prueba"  onchange="myFunction()" >
-
-                    <option>Velocidad </option>
-                    <option>Vallas</option>
+                    <option>SECTORES</option>
                     <option>Fondo / Medio Fondo</option>
                     <option>Lanzamientos</option>
                     <option>Saltos</option>
+                    <option>Vallas</option>
+                    <option>Velocidad </option>
                 </select>
                 <br><br>
-                <select id = "velocidad" name  = "velocidad" style="display:none;" >
+                <select id = "Velocidad" name  = "Velocidad" style="display:none;" >
                     <option>80 </option>
                     <option>100</option>
                     <option>300</option>
@@ -64,9 +64,9 @@
 
                 <br>
 				<label for="mark" id="informacion" name="informacion">Introduce la marca  </label>
-				<input type="text" class="form-control" id = "mm_gap_max" name = "mm_gap_max" value = 0 />
+				<input type="text" class="form-control" id = "marca" name = "marca" value = 0 />
 				<br>
-				<button type="submit" class="btn btn-primary">BUSCAR</button>
+				<button class="btn btn-primary" onclick="check_correct()">GUARDAR</button>
 				</div>
 
 	</form>
@@ -75,38 +75,46 @@
  <canvas id="lineChart" width="900" height="400"></canvas>
 	
  <script>
+    function check_correct()
+    {
+        if(document.getElementById("sesion_date").value != ''  )
+                document.getElementById("myform").setAttribute("method", "POST");
+    }
+
+
+
 
     function myFunction() {
        if (document.getElementById("tipo_prueba").value == "Velocidad")
        {
-            document.getElementById("velocidad").style.display = "block"
+            document.getElementById("Velocidad").style.display = "block"
             document.getElementById("Vallas").style.display = "none"
             document.getElementById("FondoMedioFondo").style.display = "none"
             document.getElementById("Lanzamientos").style.display = "none"
             document.getElementById("Saltos").style.display = "none"
-            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss:dd)"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
        }
        else if (document.getElementById("tipo_prueba").value == "Vallas")
        {
-            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Velocidad").style.display = "none"
             document.getElementById("Vallas").style.display = "block"
             document.getElementById("FondoMedioFondo").style.display = "none"
             document.getElementById("Lanzamientos").style.display = "none"
             document.getElementById("Saltos").style.display = "none"
-            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss:dd)"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
        }
        else if (document.getElementById("tipo_prueba").value == "Fondo / Medio Fondo")
        {
-            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Velocidad").style.display = "none"
             document.getElementById("Vallas").style.display = "none"
             document.getElementById("FondoMedioFondo").style.display = "block"
             document.getElementById("Lanzamientos").style.display = "none"
             document.getElementById("Saltos").style.display = "none"
-            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss:dd)"
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
        }  
        else if (document.getElementById("tipo_prueba").value == "Lanzamientos")
        {
-            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Velocidad").style.display = "none"
             document.getElementById("Vallas").style.display = "none"
             document.getElementById("FondoMedioFondo").style.display = "none"
             document.getElementById("Lanzamientos").style.display = "block"
@@ -115,7 +123,7 @@
        }   
        else if (document.getElementById("tipo_prueba").value == "Saltos")
        {
-            document.getElementById("velocidad").style.display = "none"
+            document.getElementById("Velocidad").style.display = "none"
             document.getElementById("Vallas").style.display = "none"
             document.getElementById("FondoMedioFondo").style.display = "none"
             document.getElementById("Lanzamientos").style.display = "none"

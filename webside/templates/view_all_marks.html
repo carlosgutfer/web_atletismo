@@ -1,0 +1,110 @@
+{% extends "base.html" %}{% block title %} VIEW ALL {% endblock %} {% block content%}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+          rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous"
+        />
+    </head>
+    <body>
+        <br><br>
+        <table class="table table-bordered table-dark" >
+            <tr>
+            <th>Fondo y Medio Fondo</th>
+            <th>fecha</th>
+            <th>marca</th>
+            </tr>
+            {% for x in marks  %}
+            <tr>
+                {% if x.sector == "Fondo / Medio Fondo" %}
+                <td>{{x.disciplina}} </td>   
+                <td>{{x.date}}</td>
+                <td>{{x.time}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+
+        <br><br>
+        <table class="table table-bordered table-dark" >
+            <tr>
+              <th>Lanzamientos</th>
+              <th>fecha</th>
+              <th>marca</th>
+            </tr>
+            {% for x in marks  %}
+            <tr>
+                {% if x.sector == "Lanzamientos" %}
+                <td>{{x.disciplina}} </td>   
+                <td>{{x.date}}</td>
+                <td>{{x.meters}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+          </table>
+
+          <br><br>
+          <table class="table table-bordered table-dark" >
+              <tr>
+              <th>Saltos</th>
+              <th>fecha</th>
+              <th>marca</th>
+              </tr>
+              {% for x in marks  %}
+              <tr>
+                  {% if x.sector == "Saltos" %}
+                  <td>{{x.disciplina}} </td>   
+                  <td>{{x.date}}</td>
+                  <td>{{x.meters}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </table>
+          
+          <br><br>
+          <table class="table table-bordered table-dark" >
+              <tr>
+              <th>Vallas</th>
+              <th>fecha</th>
+              <th>marca</th>
+              </tr>
+              {% for x in marks  %}
+              <tr>
+                  {% if x.sector == "Vallas" %}
+                  <td>{{x.disciplina}} </td>   
+                  <td>{{x.date}}</td>
+                  <td>{{x.time}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </table>
+
+          <br><br>
+          <table class="table table-bordered table-dark" >
+              <tr>
+              <th>Velocidad</th>
+              <th>fecha</th>
+              <th>marca</th>
+              </tr>
+              {% for x in marks  %}
+              <tr>
+                  {% if x.sector == "Velocidad" %}
+                  <td>{{x.disciplina}} </td>   
+                  <td>{{x.date}}</td>
+                  <td>{{x.time}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </table>
+    </body>
+</html>
+
+
+</script>
+
+{% endblock %}

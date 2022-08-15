@@ -14,8 +14,11 @@ class User_register(db.Model, UserMixin):
 
 class Marca(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    discipline = db.Column(db.String(10000))
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    sector = db.Column(db.String(10000))
+    disciplina = db.Column(db.String(10000))
+    date = db.Column(db.Date)
+    meters = db.Column(db.Float)
+    time = db.Column(db.Time)
     user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))
 
 class Test(db.Model):

@@ -1,0 +1,189 @@
+{% extends "base.html" %}{% block title %} FILTRADO MARCAS POR PRUEBAS {% endblock %} {% block content%}
+ <head>
+ 	<title>FILTRADO MARCAS POR PRUEBAS </title>
+	 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0-rc.1/Chart.bundle.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+	 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+ </head>
+
+{% if tipo == 1 %}
+<body onload="speed()" >
+{% elif tipo == 2 %}
+<body onload="meters()" >
+{% elif tipo == 3 %}
+<body onload="long()" >
+{% else %}
+<body>
+{% endif %}
+ 	<form  method = "POST" >
+				<br>
+                <select id = "tipo_prueba" name  = "tipo_prueba"  onchange="select_discipline()" >
+                    <option>SECTORES</option>
+                    <option>Fondo / Medio Fondo</option>
+                    <option>Lanzamientos</option>
+                    <option>Saltos</option>
+                    <option>Vallas</option>
+                    <option>Velocidad </option>
+                </select>
+                <br><br>
+                <select id = "Velocidad" name  = "Velocidad" style="display:none;" >
+                    <option>80 </option>
+                    <option>100</option>
+                    <option>300</option>
+                </select>
+                <select id = "Vallas" name  = "Vallas" style="display:none;" >
+                    <option>80v</option>
+                    <option>100v</option>
+                    <option>300v</option>
+                </select>
+                <select id = "FondoMedioFondo" name  = "FondoMedioFondo" style="display:none;" >
+                    <option>600 </option>
+                    <option>1000</option>
+                    <option>3000</option>
+                    <option>milla</option>
+                </select>
+                <select id = "Lanzamientos" name  = "Lanzamientos" style="display:none;" >
+                    <option>Disco</option>
+                    <option>Jabalina</option>
+                    <option>Peso</option>
+                    <option>Martillo</option>
+                </select>
+                <select id = "Saltos" name  = "Saltos" style="display:none;" >
+                    <option>Altura</option>
+                    <option>Longitud</option>
+                    <option>Pertiga</option>
+                    <option>Triple</option>
+                </select>	
+                {% if User_register.admin %}
+                <br>
+				<label for="mark" id="informacion" name="informacion">Introduce el codigo de usuario que deseas buscar </label>
+				<input type="text" class="form-control" id = "cod_usuario" name = "cod_usuario" />
+				<br>
+                {% endif %}
+				<br>
+				<button class="btn btn-primary"> BUSCAR </button>
+                <div class="container">
+                    <canvas id="lineChart" width="900" height="400" > </canvas>
+                </div>
+	</form>		
+</body>	
+
+<script>
+function speed(){
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{date | safe}},
+            datasets: [
+                {
+                    label: 'Tiempos',
+                    data: {{time | safe}},
+                    fill: false,
+                    borderCOlor: "rgb(75, 192, 192)",
+                    lineTension: 0.1
+                }
+            ]
+        },
+        options: {
+                Responsive: false,
+                scales: {
+                    yAxes: [{
+                        type: 'time',
+                        time: {
+                            bounds: 'data',
+                            parser: 'hh:mm:ss.SSSSSS',
+                            unit: 'seconds',
+                            unitStepSize: 0.10,
+                            min: '00:00:12.00',
+                            max: '00:00:15.00',
+                            displayFormats: {
+                                'seconds': 'ss.SS'
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    } 
+
+    function meters()
+    {
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var lineChart = new Chart(ctx, {
+        type: "line",
+        data: 
+        {
+            labels:{{date | safe}},
+            datasets: [
+                {
+                    label: "MARCAS",
+                    data: {{time | safe}},
+                    fill: false,
+                    borderCOlor: "rgb(75, 192, 192)",
+                    lineTension: 0.1
+                }
+            ]
+        },
+        options:
+        {
+            Responsive: false
+        }
+        });
+    }
+
+    function long()
+    {
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{date | safe}},
+            datasets: [
+                {
+                    label: 'Tiempos',
+                    data: {{time | safe}},
+                    fill: false,
+                    borderCOlor: "rgb(75, 192, 192)",
+                    lineTension: 0.1
+                }
+            ]
+        },
+        options: {
+                Responsive: false,
+                scales: {
+                    yAxes: [{
+                        type: 'time',
+                        time: {
+                            bounds: 'data',
+                            parser: 'hh:mm:ss.SSSSSS',
+                            unit: 'minute',
+                            unitStepSize: 0.20,
+                            min: '00:01:00',
+                            max: '00:06:00',
+                            displayFormats: {
+                                'minute': 'mm:ss'
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    } 
+</script>
+
+
+
+<!-- Scrip saltos y lanzamientos
+<script>
+      
+//Funcion de la velocidad
+
+</script>
+-->
+
+{% endblock %}
