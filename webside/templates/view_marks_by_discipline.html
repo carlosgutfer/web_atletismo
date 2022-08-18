@@ -1,13 +1,7 @@
 {% extends "base.html" %}{% block title %} FILTRADO MARCAS POR PRUEBAS {% endblock %} {% block content%}
  <head>
  	<title>FILTRADO MARCAS POR PRUEBAS </title>
-	 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0-rc.1/Chart.bundle.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-	 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-	 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-	 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-	 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
  </head>
 
 {% if tipo == 1 %}
@@ -67,49 +61,13 @@
 				<br>
 				<button class="btn btn-primary"> BUSCAR </button>
                 <div class="container">
-                    <canvas id="lineChart" width="900" height="400" > </canvas>
+                    <canvas id="lineChart"  > </canvas>
                 </div>
 	</form>		
 </body>	
 
 <script>
-function speed(){
-        var ctx = document.getElementById("lineChart").getContext("2d");
-        var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{date | safe}},
-            datasets: [
-                {
-                    label: 'Tiempos',
-                    data: {{time | safe}},
-                    fill: false,
-                    borderCOlor: "rgb(75, 192, 192)",
-                    lineTension: 0.1
-                }
-            ]
-        },
-        options: {
-                Responsive: false,
-                scales: {
-                    yAxes: [{
-                        type: 'time',
-                        time: {
-                            bounds: 'data',
-                            parser: 'hh:mm:ss.SSSSSS',
-                            unit: 'seconds',
-                            unitStepSize: 0.10,
-                            min: '00:00:12.00',
-                            max: '00:00:15.00',
-                            displayFormats: {
-                                'seconds': 'ss.SS'
-                            }
-                        }
-                    }]
-                }
-            }
-        });
-    } 
+
 
     function meters()
     {
@@ -139,6 +97,7 @@ function speed(){
     function long()
     {
         var ctx = document.getElementById("lineChart").getContext("2d");
+        var maxmin = {{maxmin | safe}}
         var myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -162,9 +121,9 @@ function speed(){
                             bounds: 'data',
                             parser: 'hh:mm:ss.SSSSSS',
                             unit: 'minute',
-                            unitStepSize: 0.20,
-                            min: '00:01:00',
-                            max: '00:06:00',
+                            unitStepSize: 0.03,
+                            min: maxmin[0],
+                            max: maxmin[1],
                             displayFormats: {
                                 'minute': 'mm:ss'
                             }
@@ -174,16 +133,48 @@ function speed(){
             }
         });
     } 
+
+    function speed(){
+        var ctx = document.getElementById("lineChart").getContext("2d")
+        var tiempo = {{time | safe}}
+        var fecha = {{date | safe}}
+        var maxmin = {{maxmin | safe}}
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: 
+        {
+            datasets: [
+                {
+                    data: tiempo,
+                    label: "MARCAS",
+                    fill: false,
+                    borderCOlor: "rgb(75, 192, 192)",
+                    lineTension: 0.1
+                }
+            ],
+            labels: fecha
+        },
+        options: {
+                Responsive: false,
+                scales: {
+                    yAxes: [{
+                        type: 'time',
+                        time: {
+                            parser: 'hh:mm:ss.SS',
+                            unit: 'seconds',
+                            unitStepSize: 0.05,
+                            min: maxmin[0],
+                            max: maxmin[1],
+                            displayFormats: {
+                                'seconds': 'ss.SS'
+                            }
+                        }
+                    }]
+                },
+                Responsive: false
+            }
+        });
+    } 
 </script>
-
-
-
-<!-- Scrip saltos y lanzamientos
-<script>
-      
-//Funcion de la velocidad
-
-</script>
--->
 
 {% endblock %}

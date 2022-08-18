@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from datetime import datetime
 from flask_login import login_user, login_required, logout_user, current_user
+import numpy as np
 
 views = Blueprint('views', __name__)
 
@@ -26,7 +27,6 @@ def home():
 
     return render_template("login.html", User_register=current_user)
 
-
 @views.route('/insert_mark', methods=['POST', 'GET'])
 @login_required
 def insert_mark():
@@ -38,7 +38,6 @@ def insert_mark():
         else:
             disciplina = request.form.get('FondoMedioFondo')
         marca = request.form.get('marca')
-
         if sector in ['Lanzamientos', 'Saltos']:
             nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), meters = float(marca), user_id = current_user.id)
         else:
@@ -47,43 +46,61 @@ def insert_mark():
         db.session.commit()
     return render_template("insert_mark.html", User_register=current_user)
 
-
 @views.route('/view_all_marks', methods=['POST', 'GET'])
 @login_required
 def view_all_marks():
+    if request.method == 'POST':
+            id = request.form.get('cod_usuario')
+            all_marks = Marca.query.filter_by(user_id = id).all()
+            return render_template("view_all_marks.html", User_register=current_user, marks = all_marks)
     all_marks = Marca.query.filter_by(user_id = current_user.id).all()
     return render_template("view_all_marks.html", User_register=current_user, marks = all_marks)
-
 
 @views.route('/view_marks_by_discipline', methods=['POST', 'GET'])
 @login_required
 def view_marks_by_discipline():
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get('tipo_prueba') != 'SECTORES':
         if current_user.admin and request.form.get('cod_usuario') != '':
             id = request.form.get('cod_usuario')
         else:
             id = current_user.id
-
         if request.form.get('tipo_prueba') in ['Velocidad','Vallas']:
             all_marks =  Marca.query.with_entities(Marca.date, Marca.time).filter_by(user_id = id, disciplina = request.form.get(request.form.get('tipo_prueba'))).order_by(Marca.date.asc()).all()
+            minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maximo = (np.amax(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maxmin = [minimo[0:-4], maximo[0:-4]]
             date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
             time = [row[1].strftime("%H:%M:%S.%f") for row in all_marks]
-            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 1)
+            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 1, maxmin = maxmin)
         elif request.form.get('tipo_prueba') in ['Saltos', 'Lanzamientos']:
             all_marks =  Marca.query.with_entities(Marca.date, Marca.meters).filter_by(user_id = id, disciplina = request.form.get(request.form.get('tipo_prueba'))).order_by(Marca.date.asc()).all()
             date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
             time = [row[1] for row in all_marks]
-            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 2)
+            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 2, maxmin = 0)
         else:
             all_marks =  Marca.query.with_entities(Marca.date, Marca.time).filter_by(user_id = id, disciplina = request.form.get('FondoMedioFondo')).order_by(Marca.date.asc()).all()
+            minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maximo = (np.amax(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maxmin = [minimo[0:-4], maximo[0:-4]]
+            if maxmin[0] == maxmin[1]:
+                maxmin[1] = maxmin[0][0:-7] + str(int(maxmin[0][-7:-6]) + 1) + maxmin[0][5:]
             date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
             time = [row[1].strftime("%H:%M:%S.%f") for row in all_marks]
-            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 3)
+            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 3, maxmin= maxmin)
     else:
         return render_template("view_marks_by_discipline.html", User_register=current_user, tipo = 0)
 
-
-
+@views.route('/delete_mark', methods=['POST', 'GET'])
+@login_required
+def delete_mark():
+    if request.method == 'POST':
+        all_marks = Marca.query.filter_by(user_id = current_user.id).all()
+        id = int(request.form.get('tipo_prueba').split(' / ')[0])
+        marca = Marca.query.filter_by(id=id).first()
+        db.session.delete(marca)
+        db.session.commit()
+    all_marks = Marca.query.filter_by(user_id = current_user.id).all()    
+    return render_template("delete_marks.html", User_register=current_user, marks = all_marks)
 
 @views.route('/sing_up', methods=['POST', 'GET'])
 def sign_up():

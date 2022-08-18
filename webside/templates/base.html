@@ -9,6 +9,13 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0-rc.1/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <title>{% block title %}Home{% endblock %}</title>
   </head>
   <body>
@@ -24,7 +31,7 @@
               <a class="dropdown-item" href="/insert_mark">INSERTAR NUEVA MARCA</a>
               <a class="dropdown-item" href="/view_all_marks">CONSULTAR TODAS LAS MARCAS</a>
               <a class="dropdown-item" href="/view_marks_by_discipline">CONSULTAR TODAS LAS MARCAS POR PRUEBAS</a>
-              <a class="dropdown-item" href="">ELIMINAR MARCA</a>
+              <a class="dropdown-item" href="/delete_mark">ELIMINAR MARCA</a>
             </div>
           </li>
           <li class="nav-item dropdown">

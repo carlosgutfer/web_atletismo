@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %} ELIMINADO DE MARCAS {% endblock %} {% block content%}
+<html>
+    <body>
+        <br>
+        <form  method = "POST" >
+            <select id = "tipo_prueba" name  = "tipo_prueba"  onchange="select_discipline()" >
+                {% for x in marks  %}
+                    {% if x.sector == "Lanzamientos" or  x.sector ==  "Saltos" %}
+                        <option>{{x.id}} / {{x.disciplina}} / {{x.date}} / {{x.meters}}</option>
+                    {% else %}
+                        <option>{{x.id}} / {{x.disciplina}} / {{x.date}} / {{x.time}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br><br>
+            <button class="btn btn-primary"> ELIMINAR MARCA DEFINITIVAMENTE </button>
+        </form>
+    </body>
+</html>
+
+{% endblock %}
