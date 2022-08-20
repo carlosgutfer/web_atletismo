@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %} Introducir marca {% endblock %} {% block content%}
+<html>
+    <body>
+        <form  method = "POST" >
+            <br><br>
+            <select id = "user" name  = "user">
+                {% for x in users  %}
+                    <option>{{x.id}} / {{x.name}} / {{x.surname}} </option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <select id = "grupo_tecnificacion" name  = "grupo_tecnificacion">
+                <option>SELECCIONA GRUPO</option>
+                <option>Lanzamientos</option>
+                <option>Saltos horizontales</option>
+                <option>Saltos verticales</option>
+                <option>Vallas</option>
+            </select>
+            <br><br>
+            <select id = "dia_semana" name  = "dia_semana">
+                <option>Selecciona dia semana</option>
+                <option>Lunes/Miercoles</option>
+                <option>Martes/Jueves</option>
+            </select>
+            <br> <br><br>
+				<button class="btn btn-primary">GUARDAR</button>
+            <br> <br><br>
+            {% if transaction %}
+            <h>USUARIO AÑADIDO CORRECTAMENTE </h>
+            {% endif %}
+            </div>
+        </form>
+    </body>
+</html>
+{% endblock %}

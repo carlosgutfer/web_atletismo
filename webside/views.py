@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models.User import User_register, Marca 
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
 from datetime import datetime
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 import numpy as np
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from .models.User import User_register, Marca, Technification
+from . import db
+
 
 views = Blueprint('views', __name__)
 
@@ -93,14 +95,14 @@ def view_marks_by_discipline():
 @views.route('/delete_mark', methods=['POST', 'GET'])
 @login_required
 def delete_mark():
-    if request.method == 'POST':
-        all_marks = Marca.query.filter_by(user_id = current_user.id).all()
+    all_marks = Marca.query.filter_by(user_id = current_user.id).all()
+    if request.method == 'POST' and len(all_marks) != 0:
         id = int(request.form.get('tipo_prueba').split(' / ')[0])
         marca = Marca.query.filter_by(id=id).first()
         db.session.delete(marca)
         db.session.commit()
-    all_marks = Marca.query.filter_by(user_id = current_user.id).all()    
-    return render_template("delete_marks.html", User_register=current_user, marks = all_marks)
+        return render_template("delete_marks.html", User_register=current_user, marks = all_marks)
+    return render_template("delete_marks.html", User_register=current_user, marks = False)
 
 @views.route('/sing_up', methods=['POST', 'GET'])
 def sign_up():
@@ -148,4 +150,43 @@ def delete_user():
 
     return render_template("delete_user.html", User_register=current_user, eliminado = False)
 
+@views.route('/insert_Technification', methods=['POST', 'GET'])
+@login_required
+def insert_Technification():
+    all_user = User_register.query.all()
+    if request.method == 'POST':
+        id = int(request.form.get('user').split(' / ')[0])
+        name_group = request.form.get('grupo_tecnificacion')
+        week_day = request.form.get('dia_semana')
+        new_tecnification = Technification(name_group = name_group, week_day = week_day, user_id = id)
+        db.session.add(new_tecnification)
+        db.session.commit()
+        transaction = True
+        return render_template("insert_tech_group.html", User_register=current_user, users = all_user, transaction = transaction)
+    return render_template("insert_tech_group.html", User_register=current_user, users = all_user)
 
+@views.route('/view_technification_groups', methods=['POST', 'GET'])
+@login_required
+def view_technification_groups():   
+    data = db.session.query(User_register.name, User_register.surname, Technification.name_group, Technification.week_day).select_from(Technification).join(User_register, User_register.id == Technification.user_id).all()      
+    return render_template("view_technification_groups.html", User_register = current_user , data = data)
+
+@views.route('/view_filter_technification_group', methods=['POST', 'GET'])
+@login_required
+def view_filter_technification_group():
+    if request.method == 'POST':
+        data = db.session.query(User_register.name, User_register.surname).select_from(Technification).filter_by(name_group = request.form.get('grupo_tecnificacion'), week_day = request.form.get('dia_semana')).join(User_register, User_register.id == Technification.user_id).all()         
+        return render_template("view_filter_technification_group.html", User_register = current_user, data = data, name_group = request.form.get('grupo_tecnificacion'), week_day = request.form.get('dia_semana'))
+    return render_template("view_filter_technification_group.html", User_register = current_user )   
+
+@views.route('/delete_technification_member', methods=['POST', 'GET'])
+@login_required
+def delete_technification_member():
+    data = db.session.query(User_register.id, User_register.name, User_register.surname, Technification.name_group, Technification.week_day).select_from(Technification).join(User_register, User_register.id == Technification.user_id).all()      
+    if request.method == 'POST':
+       id = int(request.form.get('user').split(' - ')[0])
+       group = Technification.query.filter_by(user_id=id).first()
+       if group:
+            db.session.delete(group)
+            db.session.commit()
+    return render_template("delete_technification_member.html",  User_register=current_user , all_user = data)

@@ -1,0 +1,145 @@
+{% extends "base.html" %}{% block title %} Filtrado marcas por pruebas {% endblock %} {% block content%}
+<html>
+  <body >  
+        <br><br>
+
+        <H1>Lanzamientos lunes-miercoles</H1>
+        <table class="table table-striped" >
+        <tr>
+        <th>nombre</th>
+        <th>Apellidos</th>
+        </tr>
+        {% for x in data  %}
+          {% if x.name_group  == "Lanzamientos" and x.week_day == "Lunes/Miercoles": %}
+              <tr> 
+                <th> {{x.name}}  </th>
+                <th> {{x.surname}}</th>
+              </tr>
+          {% endif %}
+          {% endfor %}
+          </table>
+          <br><br>
+          
+          <H1>Lanzamientos martes-jueves</H1>
+          <table class="table table-striped" >
+          <tr>
+          <th>nombre</th>
+          <th>Apellidos</th>
+          </tr>
+          {% for x in data  %}
+            {% if x.name_group  == "Lanzamientos" and x.week_day == "Martes/Jueves": %}
+                <tr> 
+                  <th> {{x.name}}  </th>
+                  <th> {{x.surname}}</th>
+                </tr>
+            {% endif %}
+            {% endfor %}
+          </table>       
+          <br><br>
+       
+        <H1>Saltos horizontales lunes</H1>
+        <table class="table table-striped" >
+        <tr>
+        <th>nombre</th>
+        <th>Apellidos</th>
+        </tr>
+        {% for x in data  %}
+          {% if x.name_group  == "Saltos horizontales" and x.week_day == "Lunes/Miercoles": %}
+              <tr> 
+                <th> {{x.name}}  </th>
+                <th> {{x.surname}}</th>
+              </tr>
+          {% endif %}
+          {% endfor %}
+          </table>
+          <br><br>
+
+          <H1>Saltos horizontales martes</H1>
+          <table class="table table-striped" >
+          <tr>
+          <th>nombre</th>
+          <th>Apellidos</th>
+          </tr>
+          {% for x in data  %}
+            {% if x.name_group  == "Saltos horizontales" and x.week_day == "Martes/Jueves": %}
+                <tr> 
+                  <th> {{x.name}}  </th>
+                  <th> {{x.surname}}</th>
+                </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+        <br><br>
+
+        <H1>Saltos verticales miercoles</H1>
+        <table class="table table-striped" >
+        <tr>
+        <th>nombre</th>
+        <th>Apellidos</th>
+        </tr>
+        {% for x in data  %}
+          {% if x.name_group  == "Saltos verticales" and x.week_day == "Lunes/Miercoles": %}
+              <tr> 
+                <th> {{x.name}}  </th>
+                <th> {{x.surname}}</th>
+              </tr>
+          {% endif %}
+          {% endfor %}
+          </table>
+          <br><br>
+
+          <H1>Saltos verticales jueves</H1>
+          <table class="table table-striped" >
+          <tr>
+          <th>nombre</th>
+          <th>Apellidos</th>
+          </tr>
+          {% for x in data  %}
+            {% if x.name_group  == "Saltos horizontales" and x.week_day == "Martes/Jueves": %}
+                <tr> 
+                  <th> {{x.name}}  </th>
+                  <th> {{x.surname}}</th>
+                </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+        <br><br>
+
+        
+        <H1>Vallas Lunes</H1>
+        <table class="table table-striped" >
+        <tr>
+        <th>nombre</th>
+        <th>Apellidos</th>
+        </tr>
+        {% for x in data  %}
+          {% if x.name_group  == "vallas" and x.week_day == "Lunes/Miercoles": %}
+              <tr> 
+                <th> {{x.name}}  </th>
+                <th> {{x.surname}}</th>
+              </tr>
+          {% endif %}
+          {% endfor %}
+          </table>
+          <br><br>
+
+          <H1>Vallas martes</H1>
+          <table class="table table-striped" >
+          <tr>
+          <th>nombre</th>
+          <th>Apellidos</th>
+          </tr>
+          {% for x in data  %}
+            {% if x.name_group  == "vallas" and x.week_day == "Martes/Jueves": %}
+                <tr> 
+                  <th> {{x.name}}  </th>
+                  <th> {{x.surname}}</th>
+                </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+        <br><br>
+  </body>
+</html>
+
+{% endblock %}

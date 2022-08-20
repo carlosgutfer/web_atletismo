@@ -19,6 +19,7 @@ def create_app():
 
     create_database(app)
 
+   
     
     from .models.User import User_register
 

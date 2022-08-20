@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %} ELIMINADO DE MARCAS {% endblock %} {% block content%}
+<body>
+    <br><br><br>
+    <form  method = "POST" >
+        <select id = "user" name  = "user">
+            {% for x in all_user  %}
+                <option>{{x.id}} - {{x.name}} - {{x.surname}} - {{x.name_group}} - {{x.week_day}} </option>
+            {% endfor %}
+        </select>
+        <br> <br><br>
+        <button class="btn btn-primary">ELIMINAR DEL GRUPO DE TECNIFICACIÓN</button>
+    </form>
+</body>
+
+{% endblock %}

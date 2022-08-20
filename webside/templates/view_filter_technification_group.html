@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% block title %} Introducir marca {% endblock %} {% block content%}
+<body>
+    <form  method = "POST" >
+        <br><br>
+        <div>
+            <select id = "grupo_tecnificacion" name  = "grupo_tecnificacion">
+                <option>SELECCIONA GRUPO</option>
+                <option>Lanzamientos</option>
+                <option>Saltos horizontales</option>
+                <option>Saltos verticales</option>
+                <option>Vallas</option>
+            </select>
+            <br><br>
+            <select id = "dia_semana" name  = "dia_semana">
+                <option>Selecciona dia semana</option>
+                <option>Lunes/Miercoles</option>
+                <option>Martes/Jueves</option>
+            </select>
+            <br> <br><br>
+                <button class="btn btn-primary">BUSCAR</button>
+            <br> <br><br>
+        </div>
+        
+        <br><br>
+        <div>
+        <H1>{{name_group}} {{week_day}}</H1>
+        <br>
+            <table class="table table-striped" >
+                <tr>
+                    <th>nombre</th>
+                    <th>Apellidos</th>
+                </tr>
+            {% for x in data  %}
+                <tr> 
+                    <th> {{x.name}}  </th>
+                    <th> {{x.surname}}</th>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+        <br><br>
+    </form>
+</body>
+{% endblock %}

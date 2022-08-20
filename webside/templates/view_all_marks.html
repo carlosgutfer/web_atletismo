@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %} VIEW ALL {% endblock %} {% block content%}
+{% extends "base.html" %}{% block title %} Marcas {% endblock %} {% block content%}
 <!DOCTYPE html>
 <html>
     <body>
@@ -8,11 +8,11 @@
             <label for="mark" id="informacion" name="informacion">Introduce el codigo de usuario que deseas buscar, si este campo está vacio mostrará las tuyas</label>
             <input type="text" class="form-control" id = "cod_usuario" name = "cod_usuario" />
             <br>
+            <button class="btn btn-primary"> BUSCAR </button>
+            <br>        <br><br>
         </form>		
         {% endif %}
         <br><br>
-        <button class="btn btn-primary"> BUSCAR </button>
-        <br>        <br><br>
 
 				
         <table class="table table-bordered table-dark" >
