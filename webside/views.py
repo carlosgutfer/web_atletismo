@@ -121,7 +121,6 @@ def sign_up():
 
     return render_template("sing_up.html", User_register=current_user)
 
-
 @views.route('/logout')
 @login_required
 def logout():
