@@ -29,7 +29,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="menuPrincipal" >
-      <div class="col-xs-12 col-sm-6 col-md-8" id="navbar">
+      <div class="col-xs-12 col-sm-6 col-md-8" id="navbar" style="padding: 20px;">
         <div class="navbar-nav">
           {% if User_register.is_authenticated %}
           <li class="nav-item dropdown">
@@ -77,11 +77,18 @@
               <a class="dropdown-item" href="/delete_user">ELIMINAR USUARIO</a>
             </div>
           </li>
-          {% endif %}
-          <a class="nav-item nav-link" id="logout" href="/logout">CERRAR SESIÓN</a>
-          {% endif %}
         </div>
       </div>
+          {% endif %}
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">  
+                  <a class="btn btn-outline-success my-2 my-sm-0"  id="logout" href="/logout" >CERRAR SESIÓN</a>
+                </li>  
+                </ul>
+            </div>
+          {% endif %}
+  
     </nav>
 
     <div class="container">{% block content %} {% endblock %}</div>
