@@ -33,3 +33,9 @@ class Technification(db.Model):
     name_group = db.Column(db.String(10000))
     week_day = db.Column(db.String(10000))
     user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))
+
+class Notes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(10000))
+    texto = db.Column(db.String(10000))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))

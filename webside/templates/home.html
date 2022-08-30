@@ -1,3 +1,30 @@
 {% extends "base.html" %}{% block title %} VIEW ALL {% endblock %} {% block content%}
-<h1> BIENVENIDOS A LA PÁGINA DE GESTIÓN DEL CAL</h1>
+<body>
+    <form method="POST">
+        {% if User_register.admin %}
+        <div>
+            <br><br>
+				<label for="mark" id="title" name="title"  rows="10" >Titulo  </label>
+                <br>
+				<input type="text" class="form-control" id = "title" name = "title"/>
+				<br>
+            <br><br>
+                    <textarea name="textarea" rows="10" cols="50" value = "Introduce la información que quieres que vean los usuarios."></textarea>
+            <br><br>
+            <button type="submit" class="btn btn-primary">PUBLICAR</button>
+        </div>
+        {% endif %}
+        <br><br>
+        <div> <h1> Bienvenido a la página de gestión del CAL, en esta pestaña podrás encontrar los avisos más recientes </h1></div>
+        {% for x in data %}
+        <div class="border border-dark">
+                <h1> {{x.title}}</h1>
+                <p> {{x.texto}} </p>
+                <p> {{x.name}} </p>
+        </div>
+        <br>
+        {% endfor %}
+
+    </form>
+</body>
 {% endblock%}

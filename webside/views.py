@@ -1,10 +1,10 @@
 from datetime import datetime
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_user, login_required, logout_user, current_user
 import numpy as np
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .models.User import User_register, Marca, Technification
+from .models.User import User_register, Marca, Technification, Notes
 from . import db
 
 
@@ -15,18 +15,26 @@ def home():
     if request.method == 'POST':
         user_cod = request.form.get('user_cod')
         password = request.form.get('password')
-
         user = User_register.query.filter_by(id=user_cod).first()
-        if user:
-            if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True)
-                return render_template("home.html", User_register=current_user)
-            else:
-                flash('Incorrect password, try again.', category='error')
+        if not current_user.is_active:
+            if user:
+                if check_password_hash(user.password, password):
+                    flash('Logged in successfully!', category='success')
+                    login_user(user, remember=True)
+                    session.permanent = True
+                    data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
+                    return render_template("home.html", User_register=current_user, data = data)
+                else:
+                    flash('Incorrect password, try again.', category='error')
         else:
-            flash('Email does not exist.', category='error')
-
+            if request.form.get('title'):
+                title =  request.form.get('title')
+                textarea =  request.form.get('textarea')
+                note = Notes(title = title, texto =  textarea, user_id =  current_user.id)
+                db.session.add(note)
+                db.session.commit()
+            data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
+            return render_template("home.html", User_register=current_user, data = data)
     return render_template("login.html", User_register=current_user)
 
 @views.route('/insert_mark', methods=['POST', 'GET'])
