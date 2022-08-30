@@ -16,11 +16,12 @@
         {% endif %}
         <br><br>
         <div> <h1> Bienvenido a la página de gestión del CAL, en esta pestaña podrás encontrar los avisos más recientes </h1></div>
+        <br>
         {% for x in data %}
-        <div class="border border-dark">
+        <div class="border border-dark" style="padding: 20px;">
                 <h1> {{x.title}}</h1>
-                <p> {{x.texto}} </p>
-                <p> {{x.name}} </p>
+                <p>  {{x.texto}} </p>
+                <p align=right>  {{x.name}} </p>
         </div>
         <br>
         {% endfor %}
