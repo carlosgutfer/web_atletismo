@@ -1,7 +1,8 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
     content %}
     <form method="POST">
-      <h3 aling="center">Sign Up</h3>
+      <br><br>
+      <h3 aling="center">Añadir nuevo usuario</h3>
       <div class="form-group">
         <label for="firstName">Nombre</label>
         <input
@@ -12,6 +13,7 @@
           placeholder="Enter name"
         />
       </div>
+      <br>
       <div class="form-group">
         <label for="firstName">Apellidos</label>
         <input
@@ -22,6 +24,7 @@
           placeholder="Enter  surname"
         />
       </div>
+      <br>
       <div class="form-group">
         <label for="password">Password</label>
         <input
@@ -32,9 +35,10 @@
           placeholder="Enter password"
         />
       </div>
+      <br>
       <input type="checkbox" id = "administrador" name  = "administrador" />
 				<label for="administrador">Administrador </label>
-      <br />
+      <br /><br>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     {% endblock %}

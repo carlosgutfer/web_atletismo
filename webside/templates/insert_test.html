@@ -1,0 +1,65 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+<html>
+    <body>
+        <form id="myform" >
+           <fieldset id="main">
+               <legend id="legendMain">Busqueda por rango de fechas</legend>
+                   <br>
+                   <div class="form-group">		
+                   <br>
+                   <label for="pieceset_idname">Selecciona la fecha test </label>
+                   <br>
+                   <input type="date" id = "sesion_date" name="sesion_date" />
+                   <br><br>
+                   <select id = "tipo_test" name  = "tipo_test"  onchange="testFunction()" >
+                       <option>Tipo test</option>
+                       <option>Pectoral</option>
+                       <option>Sentadilla</option>
+                       <option>Peso muerto</option>
+                       <option>Cargada</option>
+                       <option>Arrancada</option>
+                       <option>Salto vertical</option>
+                   </select>
+                   <br><br>
+                   <select id = "repeticiones" name  = "repeticiones">
+                        <option>Nº repeticiones</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                   </select>
+                   <br>
+                   <label for="mark" id="informacion" name="informacion">Introduce la marca</label>
+                   <input type="text" class="form-control" id = "marca" name = "marca" value = 0 />
+                   <br>
+                   <button class="btn btn-primary" onclick="check_correct()">GUARDAR</button>
+                   </div>
+   
+       </form>
+                       
+    </body>
+<script>
+      function check_correct()
+    {
+        if(document.getElementById("sesion_date").value != ''  )
+                document.getElementById("myform").setAttribute("method", "POST");
+    }
+
+    function myFunction() {
+       if (document.getElementById("tipo_prueba").value == "Salto vertical")
+       {
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
+       }
+       else if (document.getElementById("tipo_prueba").value != "Tipo test")
+       {
+            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
+       }
+    }
+</script>
+{% endblock %}
