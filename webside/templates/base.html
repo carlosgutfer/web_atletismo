@@ -29,9 +29,12 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="menuPrincipal" >
-      <div class="col-xs-12 col-sm-6 col-md-8" id="navbar" style="padding: 20px;">
+      <div class="col-xs-20 col-sm-10 col-md-10" id="navbar" style="padding: 20px;">
         <div class="navbar-nav">
           {% if User_register.is_authenticated %}
+          <a class="nav-link "  href="/"  role="button"  aria-haspopup="true" aria-expanded="false">
+            HOME
+          </a>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               MARCAS

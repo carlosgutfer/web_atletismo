@@ -12,7 +12,7 @@ views = Blueprint('views', __name__)
 
 @views.route('/', methods=['POST','GET'])
 def home():
-    if request.method == 'POST':
+    if request.method == 'POST' and not current_user.is_active:
         user_cod = request.form.get('user_cod')
         password = request.form.get('password')
         user = User_register.query.filter_by(id=user_cod).first()
@@ -35,6 +35,16 @@ def home():
                 db.session.commit()
             data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
             return render_template("home.html", User_register=current_user, data = data)
+    elif request.method == 'GET' and current_user.is_active:
+            if request.form.get('title'):
+                title =  request.form.get('title')
+                textarea =  request.form.get('textarea')
+                note = Notes(title = title, texto =  textarea, user_id =  current_user.id)
+                db.session.add(note)
+                db.session.commit()
+                data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
+                return render_template("home.html", User_register=current_user, data = data)
+            return render_template("home.html", User_register=current_user)
     return render_template("login.html", User_register=current_user)
 
 @views.route('/insert_mark', methods=['POST', 'GET'])
