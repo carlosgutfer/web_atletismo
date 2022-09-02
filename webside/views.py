@@ -12,7 +12,7 @@ views = Blueprint('views', __name__)
 
 @views.route('/', methods=['POST','GET'])
 def home():
-    if request.method == 'POST' and not current_user.is_active:
+    if request.method == 'POST':
         user_cod = request.form.get('user_cod')
         password = request.form.get('password')
         user = User_register.query.filter_by(id=user_cod).first()
