@@ -4,7 +4,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import numpy as np
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .models.User import User_register, Marca, Technification, Notes
+from .models.User import User_register, Marca, Technification, Notes, test
 from . import db
 
 
@@ -134,6 +134,32 @@ def sign_up():
 def logout():
     logout_user()
     return redirect(url_for('views.home'))
+
+
+@views.route('/insert_test', methods=['POST', 'GET'])
+@login_required
+def insert_test():
+    if request.method == 'POST':
+        tipo_test = request.form.get('tipo_test')
+        test_date = request.form.get('sesion_date')
+        repeticiones = request.form.get('repeticiones')
+        marca = request.form.get('marca')
+        nueva_marca = test(test_name = tipo_test, repeticiones = int(repeticiones), mark = marca, date = datetime.strptime(test_date, '%Y-%m-%d').date(), user_id = current_user.id)
+        db.session.add(nueva_marca)
+        db.session.commit()
+    return render_template("insert_test.html", User_register=current_user)
+
+@views.route('/view_all_test', methods=['POST', 'GET'])
+@login_required
+def view_all_test():
+    if request.method == 'POST':
+            id = request.form.get('cod_usuario')
+            all_marks = test.query.filter_by(user_id = id).all()
+            return render_template("view_all_test.html", User_register=current_user, marks = all_marks)
+    all_marks = test.query.filter_by(user_id = current_user.id).all()
+    return render_template("view_all_test.html", User_register=current_user, marks = all_marks)
+
+
 
 @views.route('/view_all')
 @login_required

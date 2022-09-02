@@ -3,7 +3,6 @@
     <body>
         <form id="myform" >
            <fieldset id="main">
-               <legend id="legendMain">Busqueda por rango de fechas</legend>
                    <br>
                    <div class="form-group">		
                    <br>
@@ -48,17 +47,17 @@
       function check_correct()
     {
         if(document.getElementById("sesion_date").value != ''  )
-                document.getElementById("myform").setAttribute("method", "POST");
+                document.getElementById("myform").setAttribute("method", "POST")
     }
 
     function myFunction() {
        if (document.getElementById("tipo_prueba").value == "Salto vertical")
        {
-            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
+            document.getElementById("informacion").innerHTML = "Introduce tu resultado en metros (m,cc)"
        }
        else if (document.getElementById("tipo_prueba").value != "Tipo test")
        {
-            document.getElementById("informacion").innerHTML = "Introduce la marca (mm:ss.dd)"
+            document.getElementById("informacion").innerHTML = "Introduce tu resultado en kilos (k,g)"
        }
     }
 </script>

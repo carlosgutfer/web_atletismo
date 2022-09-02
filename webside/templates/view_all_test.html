@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% block title %} Test {% endblock %} {% block content%}
+<!DOCTYPE html>
+<html>
+    <body>
+        {% if User_register.admin %}
+        <form  method = "POST" >
+            <br>
+            <label for="mark" id="informacion" name="informacion">Introduce el codigo de usuario que deseas buscar, si este campo está vacio mostrará las tuyas</label>
+            <input type="text" class="form-control" id = "cod_usuario" name = "cod_usuario" />
+            <br>
+            <button class="btn btn-primary"> BUSCAR </button>
+            <br>        <br><br>
+        </form>		
+        {% endif %}
+        <br><br>
+
+				
+        <table class="table table-bordered table-dark" >
+            <tr>
+            <th>Nombre test</th>
+            <th>fecha</th>
+            <th>repeticiones</th>
+            <th>marca</th>
+            </tr>
+            {% for x in marks  %}
+            <tr>
+                <td>{{x.test_name}} </td>   
+                <td>{{x.date}}</td>
+                <td>{{x.repetition}}</td>
+                <td>{{x.mark}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+    </body>
+</html>
+
+
+</script>
+
+{% endblock %}
