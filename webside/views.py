@@ -11,7 +11,7 @@ views = Blueprint('views', __name__)
 
 def calculate_rm(max):
     rm = []
-    rm.append(max)
+    rm.append(round(max))
     rm.append(round(max * 0.95))
     rm.append(round(max * 0.90))
     rm.append(round(max * 0.86))
@@ -257,7 +257,7 @@ def view_test_filter():
         tipo_test = request.form.get('tipo_test')
         all_marks =  test.query.with_entities(test.date, test.mark, test.repeticiones).filter_by(user_id = id, test_name = tipo_test).order_by(test.date.asc()).all()
         date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
-        time = [(row[1] / (1.0278 - 0.0278 + row[2])) for row in all_marks]
-        maximo = calculate_rm(max(time))
-        return render_template("view_test_filter.html", User_register=current_user, date = date, time = time, maximo = maximo)
+        time = [(row[1] / (1.0278 - 0.0278 * row[2])) for row in all_marks]
+        actual = calculate_rm(time[-1])
+        return render_template("view_test_filter.html", User_register=current_user, date = date, time = time, actual = actual)
     return render_template("view_test_filter.html", User_register=current_user, date = [], time = [])

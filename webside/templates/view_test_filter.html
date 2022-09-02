@@ -41,7 +41,7 @@
             </thead>
             <tbody>
               <tr>
-                {% for x in maximo %}
+                {% for x in actual %}
                   <td>{{x}} </td>   
                 {% endfor %}
               </tr>
@@ -59,7 +59,7 @@
                 labels:{{date | safe}},
                 datasets: [
                     {
-                        label: "MARCAS",
+                        label: "Muestra las marcas ajustadas a 1 RM",
                         data: {{time | safe}},
                         fill: false,
                         borderCOlor: "rgb(75, 192, 192)",
