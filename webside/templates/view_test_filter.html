@@ -1,0 +1,77 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+<html>
+    <body>
+        <form method="POST"> 
+           <fieldset id="main">
+                   <br>
+                   <div class="form-group">		
+                   <br><br>
+                   <select id = "tipo_test" name  = "tipo_test"   >
+                       <option>Tipo test</option>
+                       <option>Pectoral</option>
+                       <option>Sentadilla</option>
+                       <option>Peso muerto</option>
+                       <option>Cargada</option>
+                       <option>Arrancada</option>
+                       <option>Salto vertical</option>
+                   </select>
+                   <br>
+                   <br>
+                   <button class="btn btn-primary" >BUSCAR</button>
+                   </div>
+       </form>
+       <div class="container">
+            <canvas id="lineChart"  > </canvas>
+        </div>
+        <br><br>
+        <table class="table " >
+            <thead class="thead-light">
+              <tr>
+                <th>1 RM</th>
+                <th>2 RM</th>
+                <th>3 RM</th>
+                <th>4 RM</th>
+                <th>5 RM</th>
+                <th>6 RM</th>
+                <th>7 RM</th>
+                <th>8 RM</th>
+                <th>9 RM</th>
+                <th>10 RM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {% for x in maximo %}
+                  <td>{{x}} </td>   
+                {% endfor %}
+              </tr>
+            </tbody>
+            </table>  
+            <br><br>            
+    </body>
+<script>
+
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var lineChart = new Chart(ctx, {
+            type: "line",
+            data: 
+            {
+                labels:{{date | safe}},
+                datasets: [
+                    {
+                        label: "MARCAS",
+                        data: {{time | safe}},
+                        fill: false,
+                        borderCOlor: "rgb(75, 192, 192)",
+                        lineTension: 0.1
+                    }
+                ]
+            },
+            options:
+            {
+                Responsive: false
+            }
+        });
+    
+</script>
+{% endblock %}

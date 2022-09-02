@@ -3,12 +3,26 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask_login import login_user, login_required, logout_user, current_user
 import numpy as np
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from .models.User import User_register, Marca, Technification, Notes, test
 from . import db
 
 
 views = Blueprint('views', __name__)
+
+def calculate_rm(max):
+    rm = []
+    rm.append(max)
+    rm.append(round(max * 0.95))
+    rm.append(round(max * 0.90))
+    rm.append(round(max * 0.86))
+    rm.append(round(max * 0.82))
+    rm.append(round(max * 0.78))
+    rm.append(round(max * 0.74))
+    rm.append(round(max * 0.70))
+    rm.append(round(max * 0.65))
+    rm.append(round(max * 0.61))
+    return rm
+
 
 @views.route('/', methods=['POST','GET'])
 def home():
@@ -123,6 +137,7 @@ def delete_mark():
     return render_template("delete_marks.html", User_register=current_user, marks = False)
 
 @views.route('/sing_up', methods=['POST', 'GET'])
+@login_required
 def sign_up():
     if request.method == 'POST':
         name = request.form.get('firstName')
@@ -144,7 +159,6 @@ def sign_up():
 def logout():
     logout_user()
     return redirect(url_for('views.home'))
-
 
 @views.route('/insert_test', methods=['POST', 'GET'])
 @login_required
@@ -168,8 +182,6 @@ def view_all_test():
             return render_template("view_all_test.html", User_register=current_user, marks = all_marks)
     all_marks = test.query.filter_by(user_id = current_user.id).all()
     return render_template("view_all_test.html", User_register=current_user, marks = all_marks)
-
-
 
 @views.route('/view_all')
 @login_required
@@ -233,3 +245,19 @@ def delete_technification_member():
             db.session.delete(group)
             db.session.commit()
     return render_template("delete_technification_member.html",  User_register=current_user , all_user = data)
+
+@views.route('/view_test_filter', methods=['POST','GET'])
+@login_required
+def view_test_filter():
+    if request.method == 'POST':
+        if current_user.admin and request.form.get('cod_usuario') != None:
+            id = request.form.get('cod_usuario')
+        else:
+            id = current_user.id
+        tipo_test = request.form.get('tipo_test')
+        all_marks =  test.query.with_entities(test.date, test.mark, test.repeticiones).filter_by(user_id = id, test_name = tipo_test).order_by(test.date.asc()).all()
+        date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
+        time = [(row[1] / (1.0278 - 0.0278 + row[2])) for row in all_marks]
+        maximo = calculate_rm(max(time))
+        return render_template("view_test_filter.html", User_register=current_user, date = date, time = time, maximo = maximo)
+    return render_template("view_test_filter.html", User_register=current_user, date = [], time = [])
