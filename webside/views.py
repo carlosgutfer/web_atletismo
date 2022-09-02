@@ -1,27 +1,14 @@
-from datetime import datetime
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_user, login_required, logout_user, current_user
 import numpy as np
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import  check_password_hash
 from .models.User import User_register, Marca, Technification, Notes, test
 from . import db
-
+from .database import querys_ddbb as qdb
 
 views = Blueprint('views', __name__)
 
-def calculate_rm(max):
-    rm = []
-    rm.append(round(max))
-    rm.append(round(max * 0.95))
-    rm.append(round(max * 0.90))
-    rm.append(round(max * 0.86))
-    rm.append(round(max * 0.82))
-    rm.append(round(max * 0.78))
-    rm.append(round(max * 0.74))
-    rm.append(round(max * 0.70))
-    rm.append(round(max * 0.65))
-    rm.append(round(max * 0.61))
-    return rm
+
 
 
 @views.route('/', methods=['POST','GET'])
@@ -66,73 +53,51 @@ def home():
 def insert_mark():
     if request.method == 'POST':
         sector = request.form.get('tipo_prueba')
-        competition_date = request.form.get('sesion_date')
         if sector != 'Fondo / Medio Fondo':
             disciplina = request.form.get(sector)
         else:
             disciplina = request.form.get('FondoMedioFondo')
-        marca = request.form.get('marca')
-        if sector in ['Lanzamientos', 'Saltos']:
-            nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), meters = float(marca), user_id = current_user.id)
-        else:
-            nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), time = datetime.strptime(marca, '%M:%S.%f').time(), user_id = current_user.id)
-        db.session.add(nueva_marca)
-        db.session.commit()
+        qdb.insert_mark(request.form.get('tipo_prueba'),  request.form.get('sesion_date'), request.form.get('marca'), disciplina, current_user.id)
     return render_template("insert_mark.html", User_register=current_user)
 
 @views.route('/view_all_marks', methods=['POST', 'GET'])
 @login_required
 def view_all_marks():
     if request.method == 'POST':
-            id = request.form.get('cod_usuario')
-            all_marks = Marca.query.filter_by(user_id = id).all()
+            all_marks = qdb.get_all_marks(request.form.get('cod_usuario'))
             return render_template("view_all_marks.html", User_register=current_user, marks = all_marks)
-    all_marks = Marca.query.filter_by(user_id = current_user.id).all()
+    all_marks =  qdb.get_all_marks(current_user.id)
     return render_template("view_all_marks.html", User_register=current_user, marks = all_marks)
 
 @views.route('/view_marks_by_discipline', methods=['POST', 'GET'])
 @login_required
 def view_marks_by_discipline():
-    if request.method == 'POST' and request.form.get('tipo_prueba') != 'SECTORES':
+    if request.method == 'POST':
         if current_user.admin and request.form.get('cod_usuario') != '':
             id = request.form.get('cod_usuario')
         else:
             id = current_user.id
-        if request.form.get('tipo_prueba') in ['Velocidad','Vallas']:
-            all_marks =  Marca.query.with_entities(Marca.date, Marca.time).filter_by(user_id = id, disciplina = request.form.get(request.form.get('tipo_prueba'))).order_by(Marca.date.asc()).all()
-            minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
-            maximo = (np.amax(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
-            maxmin = [minimo[0:-4], maximo[0:-4]]
-            date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
-            time = [row[1].strftime("%H:%M:%S.%f") for row in all_marks]
-            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 1, maxmin = maxmin)
-        elif request.form.get('tipo_prueba') in ['Saltos', 'Lanzamientos']:
-            all_marks =  Marca.query.with_entities(Marca.date, Marca.meters).filter_by(user_id = id, disciplina = request.form.get(request.form.get('tipo_prueba'))).order_by(Marca.date.asc()).all()
-            date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
-            time = [row[1] for row in all_marks]
-            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 2, maxmin = 0)
-        else:
-            all_marks =  Marca.query.with_entities(Marca.date, Marca.time).filter_by(user_id = id, disciplina = request.form.get('FondoMedioFondo')).order_by(Marca.date.asc()).all()
-            minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
-            maximo = (np.amax(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
-            maxmin = [minimo[0:-4], maximo[0:-4]]
-            if maxmin[0] == maxmin[1]:
-                maxmin[1] = maxmin[0][0:-7] + str(int(maxmin[0][-7:-6]) + 1) + maxmin[0][5:]
-            date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
-            time = [row[1].strftime("%H:%M:%S.%f") for row in all_marks]
-            return render_template("view_marks_by_discipline.html", User_register=current_user, date = date, time = time, tipo = 3, maxmin= maxmin)
+        tipo_prueba = request.form.get('tipo_prueba')
+        if tipo_prueba != 'SECTORES':
+            disciplina = request.form.get(tipo_prueba)
+            if tipo_prueba in ['Velocidad','Vallas', 'Saltos', 'Lanzamientos']:
+                all_marks = qdb.get_marks_by_discipline(tipo_prueba, disciplina, id)
+            else:
+                all_marks = qdb.get_marks_by_discipline('FondoMedioFondo', request.form.get('FondoMedioFondo'), id) 
+            if all_marks == False:
+                 return render_template("view_marks_by_discipline.html", User_register=current_user, tipo = 0)
+            return render_template("view_marks_by_discipline.html", User_register=current_user, date = all_marks[0], time = all_marks[1], tipo = all_marks[2], maxmin = all_marks[3])
     else:
         return render_template("view_marks_by_discipline.html", User_register=current_user, tipo = 0)
 
 @views.route('/delete_mark', methods=['POST', 'GET'])
 @login_required
 def delete_mark():
-    all_marks = Marca.query.filter_by(user_id = current_user.id).all()
-    if request.method == 'POST' and len(all_marks) != 0:
+    all_marks = qdb.get_all_marks(current_user.id)
+    if request.method == 'POST':
         id = int(request.form.get('tipo_prueba').split(' / ')[0])
-        marca = Marca.query.filter_by(id=id).first()
-        db.session.delete(marca)
-        db.session.commit()
+        qdb.delete_mark(id)
+    if len(all_marks) != 0:
         return render_template("delete_marks.html", User_register=current_user, marks = all_marks)
     return render_template("delete_marks.html", User_register=current_user, marks = False)
 
@@ -140,18 +105,8 @@ def delete_mark():
 @login_required
 def sign_up():
     if request.method == 'POST':
-        name = request.form.get('firstName')
-        password = request.form.get('password')
-        if request.form.get('administrador'):
-            admin = True
-        else:
-            admin = False
-        surname = request.form.get('surname')
-        new_user = User_register(name=name, password=generate_password_hash(password, method='sha256'), admin = admin, surname=surname)
-        db.session.add(new_user)
-        db.session.commit()
+        qdb.insert_user(request.form.get('firstName'), request.form.get('password'), request.form.get('administrador'), request.form.get('surname'))
         return render_template("sing_up.html", User_register=current_user)
-
     return render_template("sing_up.html", User_register=current_user)
 
 @views.route('/logout')
@@ -164,13 +119,7 @@ def logout():
 @login_required
 def insert_test():
     if request.method == 'POST':
-        tipo_test = request.form.get('tipo_test')
-        test_date = request.form.get('sesion_date')
-        repeticiones = request.form.get('repeticiones')
-        marca = request.form.get('marca')
-        nueva_marca = test(test_name = tipo_test, repeticiones = int(repeticiones), mark = marca, date = datetime.strptime(test_date, '%Y-%m-%d').date(), user_id = current_user.id)
-        db.session.add(nueva_marca)
-        db.session.commit()
+        qdb.insert_test(request.form.get('tipo_test'), request.form.get('sesion_date'),  request.form.get('repeticiones'), request.form.get('marca'), current_user.id)
     return render_template("insert_test.html", User_register=current_user)
 
 @views.route('/view_all_test', methods=['POST', 'GET'])
@@ -210,13 +159,7 @@ def delete_user():
 def insert_Technification():
     all_user = User_register.query.all()
     if request.method == 'POST':
-        id = int(request.form.get('user').split(' / ')[0])
-        name_group = request.form.get('grupo_tecnificacion')
-        week_day = request.form.get('dia_semana')
-        new_tecnification = Technification(name_group = name_group, week_day = week_day, user_id = id)
-        db.session.add(new_tecnification)
-        db.session.commit()
-        transaction = True
+        transaction = qdb.insert_technification(request.form.get('user'), request.form.get('grupo_tecnificacion'), request.form.get('dia_semana'))
         return render_template("insert_tech_group.html", User_register=current_user, users = all_user, transaction = transaction)
     return render_template("insert_tech_group.html", User_register=current_user, users = all_user)
 
@@ -254,10 +197,6 @@ def view_test_filter():
             id = request.form.get('cod_usuario')
         else:
             id = current_user.id
-        tipo_test = request.form.get('tipo_test')
-        all_marks =  test.query.with_entities(test.date, test.mark, test.repeticiones).filter_by(user_id = id, test_name = tipo_test).order_by(test.date.asc()).all()
-        date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
-        time = [(row[1] / (1.0278 - 0.0278 * row[2])) for row in all_marks]
-        actual = calculate_rm(time[-1])
-        return render_template("view_test_filter.html", User_register=current_user, date = date, time = time, actual = actual)
+        data = qdb.get_test(request.form.get('tipo_test'), id)
+        return render_template("view_test_filter.html", User_register=current_user, date = data[0], time = data[1], actual = data[2])
     return render_template("view_test_filter.html", User_register=current_user, date = [], time = [])
