@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_user, login_required, logout_user, current_user
-import numpy as np
 from werkzeug.security import  check_password_hash
-from .models.User import User_register, Marca, Technification, Notes, test
+from .models.User import User_register, Marca, Technification, test
 from . import db
 from .database import querys_ddbb as qdb
 
@@ -23,7 +22,7 @@ def home():
                     flash('Logged in successfully!', category='success')
                     login_user(user, remember=True)
                     session.permanent = True
-                    data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
+                    data = qdb.get_notes()        
                     return render_template("home.html", User_register=current_user, data = data)
         else:
             if request.form.get('title'):
