@@ -211,3 +211,38 @@ def get_mark_by_test(tipo_test, id):
         return [date, time, actual]
     except:
         return False
+
+
+def get_all_test(id):
+    '''
+        def 
+            Select all register for one user on test table
+        INPUT
+            ID --> INT
+        OUTPUT 
+            array --> succesfull\n
+            false --> something wrong
+    '''
+    try:
+        all_test = test.query.filter_by(user_id = id).all()
+        return all_test
+    except:
+        return False
+
+def delete_test(id):
+    ''' 
+        def
+            Delete record from table test
+        INPUT
+            ID --> INT
+        OUTPUT 
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        test = test.query.filter_by(id=id).first()
+        db.session.delete(test)
+        db.session.commit()
+        return True
+    except:
+        return False

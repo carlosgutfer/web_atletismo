@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %} ELIMINADO DE MARCAS {% endblock %} {% block content%}
+<html>
+    <body>
+        <br>
+        <form  method = "POST" >
+            {% if test != False %}
+                <select id = "tipo_test" name  = "tipo_test">
+                    {% for x in test %}
+                        <option>{{x.id}} / {{x.test_name}} / {{x.date}} / {{x.mark}} / {{x.repeticiones}}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                    <button class="btn btn-primary"> ELIMINAR MARCA  TEST DEFINITIVAMENTE </button>   
+            {% else %}                    
+                <h> Lo siento, no tienes ahora mismo ningun test para borrar</h>
+            {% endif%}
+        </form>
+    </body>
+</html>
+
+{% endblock %}

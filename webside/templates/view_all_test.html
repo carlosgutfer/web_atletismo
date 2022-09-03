@@ -15,13 +15,16 @@
         <br><br>
 
 				
-        <table class="table table-bordered table-dark" >
-            <tr>
-            <th>Nombre test</th>
-            <th>fecha</th>
-            <th>repeticiones</th>
-            <th>marca</th>
-            </tr>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre test</th>
+                    <th scope="col">fecha</th>
+                    <th scope="col">repeticiones</th>
+                    <th scope="col">marca</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for x in marks  %}
             <tr>
                 <td>{{x.test_name}} </td>   
@@ -30,9 +33,11 @@
                 <td>{{x.mark}}</td>
             </tr>
             {% endfor %}
+            </tbody>
         </table>
         <br><br>
     </body>
+    
 </html>
 
 

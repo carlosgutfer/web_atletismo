@@ -197,6 +197,19 @@ def view_test_filter():
             id = request.form.get('cod_usuario')
         else:
             id = current_user.id
-        data = qdb.get_test(request.form.get('tipo_test'), id)
+        data = qdb.get_mark_by_test(request.form.get('tipo_test'), id)
+        if not data:
+             return render_template("view_test_filter.html", User_register=current_user, date = [], time = [])
         return render_template("view_test_filter.html", User_register=current_user, date = data[0], time = data[1], actual = data[2])
     return render_template("view_test_filter.html", User_register=current_user, date = [], time = [])
+
+@views.route('/delete_test', methods=['POST', 'GET'])
+@login_required
+def delete_test():
+    all_test = qdb.get_all_test(current_user.id)
+    if request.method == 'POST':
+        id = int(request.form.get('tipo_test').split(' / ')[0])
+        qdb.delete_test(id)
+    if len(all_test) != 0:
+        return render_template("delete_test.html", User_register=current_user, test = all_test)
+    return render_template("delete_test.html", User_register=current_user, test = False)

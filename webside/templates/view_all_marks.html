@@ -15,25 +15,28 @@
         <br><br>
 
 				
-        <table class="table table-bordered table-dark" >
-            <tr>
-            <th>Fondo y Medio Fondo</th>
-            <th>fecha</th>
-            <th>marca</th>
-            </tr>
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>Fondo y Medio Fondo</th>
+                    <th>fecha</th>
+                    <th>marca</th>
+                </tr>
+            </tbody>
             {% for x in marks  %}
-            <tr>
-                {% if x.sector == "Fondo / Medio Fondo" %}
-                <td>{{x.disciplina}} </td>   
-                <td>{{x.date}}</td>
-                <td>{{x.time}}</td>
-                {% endif %}
-            </tr>
+            <thead>
+                <tr>
+                    {% if x.sector == "Fondo / Medio Fondo" %}
+                    <td>{{x.disciplina}} </td>   
+                    <td>{{x.date}}</td>
+                    <td>{{x.time}}</td>
+                    {% endif %}
+                </tr>
+            </thead>
             {% endfor %}
         </table>
-
         <br><br>
-        <table class="table table-bordered table-dark" >
+        <table class="table table-striped" >
             <tr>
               <th>Lanzamientos</th>
               <th>fecha</th>
@@ -51,7 +54,7 @@
           </table>
 
           <br><br>
-          <table class="table table-bordered table-dark" >
+          <table class="table table-striped" >
               <tr>
               <th>Saltos</th>
               <th>fecha</th>
@@ -69,7 +72,7 @@
           </table>
           
           <br><br>
-          <table class="table table-bordered table-dark" >
+          <table class="table table-striped" >
               <tr>
               <th>Vallas</th>
               <th>fecha</th>
@@ -87,7 +90,7 @@
           </table>
 
           <br><br>
-          <table class="table table-bordered table-dark" >
+          <table class="table table-striped" >
               <tr>
               <th>Velocidad</th>
               <th>fecha</th>
