@@ -3,7 +3,7 @@ from datetime import datetime
 import numpy as np
 from werkzeug.security import generate_password_hash
 
-from ..models.User import Marca, User_register, test, Technification
+from ..models.User import Marca, User_register, test, Technification, Notes
 from .. import db 
 
 
@@ -242,6 +242,30 @@ def delete_test(id):
     try:
         test = test.query.filter_by(id=id).first()
         db.session.delete(test)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+def get_notes():
+    return db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()
+
+def insert_note(title, textarea, id):
+    '''
+        def
+            Insert new record on note table
+        INPUT
+            TITLE --> STR\n
+            TEXTAREA --> STR\n
+            ID --> INT\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        note = Notes(title = title, texto =  textarea, user_id =  id)
+        db.session.add(note)
         db.session.commit()
         return True
     except:

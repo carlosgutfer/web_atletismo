@@ -25,27 +25,14 @@ def home():
                     session.permanent = True
                     data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
                     return render_template("home.html", User_register=current_user, data = data)
-                else:
-                    flash('Incorrect password, try again.', category='error')
         else:
             if request.form.get('title'):
-                title =  request.form.get('title')
-                textarea =  request.form.get('textarea')
-                note = Notes(title = title, texto =  textarea, user_id =  current_user.id)
-                db.session.add(note)
-                db.session.commit()
-            data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
+                qdb.insert_note(request.form.get('title'), request.form.get('textarea'), current_user.id)
+            data = qdb.get_notes()      
             return render_template("home.html", User_register=current_user, data = data)
     elif request.method == 'GET' and current_user.is_active:
-            if request.form.get('title'):
-                title =  request.form.get('title')
-                textarea =  request.form.get('textarea')
-                note = Notes(title = title, texto =  textarea, user_id =  current_user.id)
-                db.session.add(note)
-                db.session.commit()
-                data = db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()      
-                return render_template("home.html", User_register=current_user, data = data)
-            return render_template("home.html", User_register=current_user)
+        data = qdb.get_notes()   
+        return render_template("home.html", User_register=current_user, data = data)
     return render_template("login.html", User_register=current_user)
 
 @views.route('/insert_mark', methods=['POST', 'GET'])
