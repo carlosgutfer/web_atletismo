@@ -1,13 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import  check_password_hash
-from .models.User import User_register, Marca, Technification, test
+from .models.User import User_register, Technification
 from . import db
 from .database import querys_ddbb as qdb
 
 views = Blueprint('views', __name__)
-
-
 
 
 @views.route('/', methods=['POST','GET'])
@@ -22,16 +20,13 @@ def home():
                     flash('Logged in successfully!', category='success')
                     login_user(user, remember=True)
                     session.permanent = True
-                    data = qdb.get_notes()        
-                    return render_template("home.html", User_register=current_user, data = data)
+                    return render_template("home.html", User_register=current_user, data = qdb.get_notes())
         else:
             if request.form.get('title'):
                 qdb.insert_note(request.form.get('title'), request.form.get('textarea'), current_user.id)
-            data = qdb.get_notes()      
-            return render_template("home.html", User_register=current_user, data = data)
+            return render_template("home.html", User_register=current_user, data = qdb.get_notes() )
     elif request.method == 'GET' and current_user.is_active:
-        data = qdb.get_notes()   
-        return render_template("home.html", User_register=current_user, data = data)
+        return render_template("home.html", User_register=current_user, data = qdb.get_notes() )
     return render_template("login.html", User_register=current_user)
 
 @views.route('/insert_mark', methods=['POST', 'GET'])
@@ -50,10 +45,8 @@ def insert_mark():
 @login_required
 def view_all_marks():
     if request.method == 'POST':
-            all_marks = qdb.get_all_marks(request.form.get('cod_usuario'))
-            return render_template("view_all_marks.html", User_register=current_user, marks = all_marks)
-    all_marks =  qdb.get_all_marks(current_user.id)
-    return render_template("view_all_marks.html", User_register=current_user, marks = all_marks)
+            return render_template("view_all_marks.html", User_register=current_user, marks = qdb.get_all_marks(request.form.get('cod_usuario')))
+    return render_template("view_all_marks.html", User_register=current_user, marks = qdb.get_all_marks(current_user.id))
 
 @views.route('/view_marks_by_discipline', methods=['POST', 'GET'])
 @login_required
@@ -112,11 +105,8 @@ def insert_test():
 @login_required
 def view_all_test():
     if request.method == 'POST':
-            id = request.form.get('cod_usuario')
-            all_marks = test.query.filter_by(user_id = id).all()
-            return render_template("view_all_test.html", User_register=current_user, marks = all_marks)
-    all_marks = test.query.filter_by(user_id = current_user.id).all()
-    return render_template("view_all_test.html", User_register=current_user, marks = all_marks)
+            return render_template("view_all_test.html", User_register=current_user, marks = qdb.get_all_test(request.form.get('cod_usuario')))
+    return render_template("view_all_test.html", User_register=current_user, marks = qdb.get_all_test(current_user.id))
 
 @views.route('/view_all')
 @login_required

@@ -21,7 +21,14 @@ def calculate_rm(max):
     rm.append(round(max * 0.61))
     return rm
 
+"""
+    Methods for mark table
 
+        --> Insert
+        --> Get_all
+        --> Get filter
+        --> delete mark
+"""
 def insert_mark(sector, competition_date, marca, disciplina, id):
     '''
         def
@@ -123,6 +130,11 @@ def delete_mark(id):
     except:
         return False
 
+"""
+    Methods for User table
+
+        --> Insert
+"""
 def insert_user(name, password, admin, surname):
     '''
         def 
@@ -148,27 +160,6 @@ def insert_user(name, password, admin, surname):
     except:
         return False
 
-def insert_test(tipo_test, test_date, repeticiones, marca, id):
-    '''
-        def
-            Insert new record on test table
-        INPUT
-            TIPO_TEST --> STR\n
-            TEST_DATE --> STR\n
-            REPETICIONES --> STR\n
-            MARCA --> FLOAT\n
-            ID --> INT\n
-        OUTPUT
-            TRUE --> SUCCESFULL\n
-            FALSE --> SOMETHING IS WRONG
-    '''
-    try:
-        nuevo_test = test(test_name = tipo_test, repeticiones = int(repeticiones), mark = marca, date = datetime.strptime(test_date, '%Y-%m-%d').date(), user_id = id)
-        db.session.add(nuevo_test)
-        db.session.commit()
-        return True
-    except:
-        return False
 
 def insert_technification(user, name_group, week_day):
     '''
@@ -187,6 +178,37 @@ def insert_technification(user, name_group, week_day):
         id = int(user.split(' / ')[0])
         new_tecnification = Technification(name_group = name_group, week_day = week_day, user_id = id)
         db.session.add(new_tecnification)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+
+"""
+    Methods for mark table
+
+        --> Insert
+        --> Get filter 
+        --> Get all 
+        --> delete test
+"""
+def insert_test(tipo_test, test_date, repeticiones, marca, id):
+    '''
+        def
+            Insert new record on test table
+        INPUT
+            TIPO_TEST --> STR\n
+            TEST_DATE --> STR\n
+            REPETICIONES --> STR\n
+            MARCA --> FLOAT\n
+            ID --> INT\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        nuevo_test = test(test_name = tipo_test, repeticiones = int(repeticiones), mark = marca, date = datetime.strptime(test_date, '%Y-%m-%d').date(), user_id = id)
+        db.session.add(nuevo_test)
         db.session.commit()
         return True
     except:
@@ -211,7 +233,6 @@ def get_mark_by_test(tipo_test, id):
         return [date, time, actual]
     except:
         return False
-
 
 def get_all_test(id):
     '''
