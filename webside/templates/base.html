@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" href="../static/favicon.icon" width="50" height="50">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" 
@@ -32,7 +33,7 @@
       <div class="col-xs-20 col-sm-10 col-md-10" id="navbar" style="padding: 20px;">
         <div class="navbar-nav">
           {% if User_register.is_authenticated %}
-          <a href="/" ><img src="../static/logonegro.jpg" alt="HOME"  width="100" height="50" style="padding-right: 10px;"></a>
+          <a href="/" ><img src="../static/logonegro.png" alt="HOME"  width="100" height="50" style="padding-right: 10px;"></a>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
               MARCAS
@@ -81,7 +82,7 @@
         </div>
       </div>
           {% endif %}
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <div class="navbar-collapse" style="padding: 20px;">
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item">  
                   <a class="btn btn-outline-success my-2 my-sm-0"  id="logout" href="/logout" >CERRAR SESIÓN</a>
@@ -108,13 +109,6 @@
       src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
-    ></script>
-
-
-
-    <script
-      type="text/javascript"
-      src="{{ url_for('static', filename='index.js') }}"
     ></script>
   </body>
 </html>
