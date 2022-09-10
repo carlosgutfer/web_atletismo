@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash
 
 from ..models.User import Marca, User_register, test, Technification, Notes
 from .. import db 
-
+from sqlalchemy import or_
 
 def calculate_rm(max):
     rm = []
@@ -67,6 +67,23 @@ def get_all_marks(id):
     '''
     try:
         all_marks = Marca.query.filter_by(user_id = id).all()
+        return all_marks
+    except:
+        return False
+
+
+def get_all_marks_admin(ids):
+    '''
+        def 
+            Select all register for one user on Marks table
+        INPUT
+            ID --> INT
+        OUTPUT 
+            array --> succesfull\n
+            false --> something wrong
+    '''
+    try:
+        all_marks = db.session.query(User_register.name, User_register.surname, Marca).select_from(Marca).join(User_register, User_register.id == Marca.user_id).filter(or_(*[Marca.user_id.like(id) for id in ids])).all()
         return all_marks
     except:
         return False
@@ -160,7 +177,14 @@ def insert_user(name, password, admin, surname):
     except:
         return False
 
+def update_password(usuario, password):
+    setattr(usuario, 'password',generate_password_hash(password, method='sha256'))
+    db.session.commit()
 
+"""
+    Technification group 
+        --> Insert
+"""
 def insert_technification(user, name_group, week_day):
     '''
         def 
@@ -178,6 +202,40 @@ def insert_technification(user, name_group, week_day):
         id = int(user.split(' / ')[0])
         new_tecnification = Technification(name_group = name_group, week_day = week_day, user_id = id)
         db.session.add(new_tecnification)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def get_all_test(id):
+    '''
+        def 
+            Select all register for one user on test table
+        INPUT
+            ID --> INT
+        OUTPUT 
+            array --> succesfull\n
+            false --> something wrong
+    '''
+    try:
+        all_test = test.query.filter_by(user_id = id).all()
+        return all_test
+    except:
+        return False
+
+def delete_test(id):
+    ''' 
+        def
+            Delete record from table test
+        INPUT
+            ID --> INT
+        OUTPUT 
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        test_select = test.query.filter_by(id=id).first()
+        db.session.delete(test_select)
         db.session.commit()
         return True
     except:
@@ -233,41 +291,6 @@ def get_mark_by_test(tipo_test, id):
         return [date, time, actual]
     except:
         return False
-
-def get_all_test(id):
-    '''
-        def 
-            Select all register for one user on test table
-        INPUT
-            ID --> INT
-        OUTPUT 
-            array --> succesfull\n
-            false --> something wrong
-    '''
-    try:
-        all_test = test.query.filter_by(user_id = id).all()
-        return all_test
-    except:
-        return False
-
-def delete_test(id):
-    ''' 
-        def
-            Delete record from table test
-        INPUT
-            ID --> INT
-        OUTPUT 
-            TRUE --> SUCCESFULL\n
-            FALSE --> SOMETHING IS WRONG
-    '''
-    try:
-        test = test.query.filter_by(id=id).first()
-        db.session.delete(test)
-        db.session.commit()
-        return True
-    except:
-        return False
-
 
 def get_notes():
     return db.session.query(User_register.name, Notes.texto, Notes.title ).select_from(Notes).join(User_register, User_register.id == Notes.user_id).all()

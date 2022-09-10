@@ -44,8 +44,13 @@ def insert_mark():
 @views.route('/view_all_marks', methods=['POST', 'GET'])
 @login_required
 def view_all_marks():
-    if request.method == 'POST':
-            return render_template("view_all_marks.html", User_register=current_user, marks = qdb.get_all_marks(request.form.get('cod_usuario')))
+    if request.method == 'POST' and current_user.admin:
+            ids = request.form.getlist('ids')
+            all_user = db.session.query(User_register.id, User_register.name, User_register.surname).all()
+            return render_template("view_all_marks_admin.html", User_register=current_user, marks = qdb.get_all_marks_admin(ids),all_user = all_user)
+    elif request.method == 'GET'and current_user.admin:
+        all_user = db.session.query(User_register.id, User_register.name, User_register.surname).all()
+        return render_template("view_all_marks_admin.html", User_register=current_user, marks = qdb.get_all_marks_admin([current_user.id]), all_user = all_user)
     return render_template("view_all_marks.html", User_register=current_user, marks = qdb.get_all_marks(current_user.id))
 
 @views.route('/view_marks_by_discipline', methods=['POST', 'GET'])
@@ -87,6 +92,19 @@ def sign_up():
         qdb.insert_user(request.form.get('firstName'), request.form.get('password'), request.form.get('administrador'), request.form.get('surname'))
         return render_template("sing_up.html", User_register=current_user)
     return render_template("sing_up.html", User_register=current_user)
+
+@views.route('/change_pass', methods=['POST', 'GET'])
+@login_required
+def change_pass():
+    if request.method == 'POST':
+        old_password = request.form.get('old_password')
+        password1 = request.form.get('new_password1')
+        password2 = request.form.get('new_password2')
+        if password1 == password2:
+            if check_password_hash(current_user.password, old_password):
+                qdb.update_password(current_user, password1)
+                return render_template("change_pass.html", User_register=current_user)
+    return render_template("change_pass.html", User_register=current_user)
 
 @views.route('/logout')
 @login_required

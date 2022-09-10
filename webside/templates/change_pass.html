@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
+    content %}
+    <form method="POST">
+      <br><br>
+      <h3 aling="center">Cambiar contraseña</h3>
+      <div class="form-group">
+        <label for="old_password">Contraseña antigua</label>
+        <input
+          type="password"
+          class="form-control"
+          id="old_password"
+          name="old_password"
+          placeholder="Antigua contraseña"
+        />
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="new_pass1">Nueva contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="new_password1"
+          name="new_password1"
+          placeholder="Nueva contraseña"
+        />
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="new_pass1">Repite la contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="new_password2"
+          name="new_password2"
+          placeholder="Repite la contraseña"
+        />
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endblock %}

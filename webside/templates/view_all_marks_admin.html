@@ -1,0 +1,138 @@
+{% extends "base.html" %}{% block title %} Marcas {% endblock %} {% block content%}
+<!DOCTYPE html>
+<html>
+    <body>
+        {% if User_register.admin %}
+        <form  method = "POST" >
+            <br><br>
+            <select class="list-group" multiple id="ids" name = "ids">
+                {% for x  in all_user: %}
+                  <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button class="btn btn-primary"> BUSCAR </button>
+            <br><br><br>
+        </form>		
+        {% endif %}
+        <br><br>
+
+				
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>Fondo y Medio Fondo</th>
+                    <th>fecha</th>
+                    <th>marca</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                </tr>
+            </tbody>
+            {% for x in marks  %}
+            <thead>
+                <tr>
+                    {% if x.Marca.sector == "Fondo / Medio Fondo" %}
+                    <td>{{x.Marca.disciplina}} </td>   
+                    <td>{{x.Marca.date}}</td>
+                    <td>{{x.Marca.time}}</td>
+                    <td>{{x.name}}</td>
+                    <td>{{x.surname}}</td>
+                    {% endif %}
+                </tr>
+            </thead>
+            {% endfor %}
+        </table>
+        <br><br>
+        <table class="table table-striped" >
+            <tr>
+              <th>Lanzamientos</th>
+              <th>fecha</th>
+              <th>marca</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+            </tr>
+            {% for x in marks  %}
+            <tr>
+                {% if x.Marca.sector == "Lanzamientos" %}
+                <td>{{x.Marca.disciplina}} </td>   
+                <td>{{x.Marca.date}}</td>
+                <td>{{x.Marca.meters}}</td>
+                <td>{{x.name}}</td>
+                <td>{{x.surname}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+          </table>
+
+          <br><br>
+          <table class="table table-striped" >
+              <tr>
+              <th>Saltos</th>
+              <th>fecha</th>
+              <th>marca</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              </tr>
+              {% for x in marks  %}
+              <tr>
+                  {% if x.Marca.sector == "Saltos" %}
+                  <td>{{x.Marca.disciplina}} </td>   
+                  <td>{{x.Marca.date}}</td>
+                  <td>{{x.Marca.meters}}</td>
+                  <td>{{x.name}}</td>
+                  <td>{{x.surname}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </table>
+          
+          <br><br>
+          <table class="table table-striped" >
+              <tr>
+              <th>Vallas</th>
+              <th>fecha</th>
+              <th>marca</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              </tr>
+              {% for x in marks  %}
+              <tr>
+                  {% if x.Marca.sector == "Vallas" %}
+                  <td>{{x.Marca.disciplina}} </td>   
+                  <td>{{x.Marca.date}}</td>
+                  <td>{{x.Marca.time}}</td>
+                  <td>{{x.name}}</td>
+                  <td>{{x.surname}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </table>
+
+          <br><br>
+          <table class="table table-striped" >
+              <tr>
+              <th>Velocidad</th>
+              <th>fecha</th>
+              <th>marca</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+              </tr>
+              {% for x in marks  %}
+              <tr>
+                  {% if x.Marca.sector == "Velocidad" %}
+                  <td>{{x.Marca.disciplina}} </td>   
+                  <td>{{x.Marca.date}}</td>
+                  <td>{{x.Marca.time}}</td>
+                  <td>{{x.name}}</td>
+                  <td>{{x.surname}}</td>
+                  {% endif %}
+              </tr>
+              {% endfor %}
+          </table>
+    </body>
+</html>
+
+
+</script>
+
+{% endblock %}
