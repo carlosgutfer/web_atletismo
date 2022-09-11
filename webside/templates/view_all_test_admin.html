@@ -1,0 +1,49 @@
+{% extends "base.html" %}{% block title %} Test {% endblock %} {% block content%}
+<!DOCTYPE html>
+<html>
+    <body>
+        <form  method = "POST" >
+            <br><br>
+            <select class="list-group" multiple id="ids" name = "ids">
+                {% for x  in all_user: %}
+                  <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button class="btn btn-primary"> BUSCAR </button>
+            <br><br><br>
+        </form>		
+        <br><br>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre test</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Repeticiones</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Marca</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for x in test %}
+            <tr>
+                <td>{{x.test.test_name}} </td>   
+                <td>{{x.test.date}}</td>
+                <td>{{x.test.repeticiones}}</td>
+                <td>{{x.test.mark}}</td>
+                <td>{{x.name}}</td>
+                <td>{{x.surname}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br><br>
+    </body>
+    
+</html>
+
+
+</script>
+
+{% endblock %}

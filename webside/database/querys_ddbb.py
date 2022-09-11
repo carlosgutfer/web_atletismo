@@ -2,8 +2,8 @@ import hashlib
 from datetime import datetime
 import numpy as np
 from werkzeug.security import generate_password_hash
-
-from ..models.User import Marca, User_register, test, Technification, Notes
+from collections import Counter
+from ..models.User import Marca, User_register, test, Technification, Notes, test
 from .. import db 
 from sqlalchemy import or_
 
@@ -71,7 +71,6 @@ def get_all_marks(id):
     except:
         return False
 
-
 def get_all_marks_admin(ids):
     '''
         def 
@@ -103,6 +102,7 @@ def get_marks_by_discipline( tipo_prueba, disciplina, id):
              FALSE --> something wrong
     '''
     try:
+
         if tipo_prueba in ['Velocidad','Vallas']:
             all_marks =  Marca.query.with_entities(Marca.date, Marca.time).filter_by(user_id = id, disciplina = disciplina).order_by(Marca.date.asc()).all()
             minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
@@ -129,6 +129,53 @@ def get_marks_by_discipline( tipo_prueba, disciplina, id):
     except:
         return False
 
+
+def get_marks_by_discipline_admin( tipo_prueba, disciplina, id):
+    '''
+        def
+            Return * marks from an user and a discipline from marks table
+        
+        INPUT
+            ID --> INT\n
+            TIPO_PRUEBA --> STR\n
+            DISCIPLINA --> STR\n
+        
+        OUTPUT 
+             ARRAY --> SUCCESFULL\n
+             FALSE --> something wrong
+    '''
+    try:
+        if tipo_prueba in ['Velocidad','Vallas']:
+            all_marks = db.session.query(Marca.date, Marca.time, User_register.name, User_register.surname).select_from(Marca).filter_by( disciplina = disciplina, user_id = id).join(User_register, User_register.id == Marca.user_id).order_by(Marca.date.asc()).all()            
+            user = np.unique([row[2] + " " + row[3] for row in all_marks])
+            minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maximo = (np.amax(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maxmin = [minimo[0:-4], maximo[0:-4]]
+            date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
+            time = [row[1].strftime("%H:%M:%S.%f") for row in all_marks]
+            return [date, time, 1, maxmin, user]
+        elif tipo_prueba in ['Saltos', 'Lanzamientos']:
+            all_marks = db.session.query(Marca.date, Marca.meters, User_register.name, User_register.surname).select_from(Marca).filter_by( disciplina = disciplina, user_id = id).join(User_register, User_register.id == Marca.user_id).order_by(Marca.date.asc()).all()               
+            user = np.unique([row[2] + " " + row[3] for row in all_marks])
+            date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
+            time = [row[1] for row in all_marks]
+            return [date, time, 2, 0, user]
+        else:
+            all_marks = db.session.query(Marca.date, Marca.time, User_register.name, User_register.surname).select_from(Marca).filter_by(disciplina = disciplina, user_id = id).join(User_register, User_register.id == Marca.user_id).order_by(Marca.date.asc()).all()            
+            user = np.unique([row[2] + " " + row[3] for row in all_marks])
+            minimo = (np.amin(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maximo = (np.amax(np.array([row[1] for row in all_marks]))).strftime("%H:%M:%S.%f")
+            maxmin = [minimo[0:-4], maximo[0:-4]]
+            if maxmin[0] == maxmin[1]:
+                maxmin[1] = maxmin[0][0:-7] + str(int(maxmin[0][-7:-6]) + 1) + maxmin[0][5:]
+            date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
+            time = [row[1].strftime("%H:%M:%S.%f") for row in all_marks]
+            return [date, time, 3, maxmin, user]
+    except:
+        return False
+
+
+
 def delete_mark(id):
     ''' 
         def
@@ -150,7 +197,9 @@ def delete_mark(id):
 """
     Methods for User table
 
-        --> Insert
+        --> Insert_user: insert new record for  User table
+        --> update_password: Set new password record for  User table
+        --> get_all_user: Get all records from User table
 """
 def insert_user(name, password, admin, surname):
     '''
@@ -180,6 +229,10 @@ def insert_user(name, password, admin, surname):
 def update_password(usuario, password):
     setattr(usuario, 'password',generate_password_hash(password, method='sha256'))
     db.session.commit()
+
+def get_all_user():
+    return db.session.query(User_register.id, User_register.name, User_register.surname).all()
+
 
 """
     Technification group 
@@ -241,6 +294,21 @@ def delete_test(id):
     except:
         return False
 
+def get_all_test_admin(ids):
+    '''
+        def 
+            Select all register for ids on Test table
+        INPUT
+            ID --> INT
+        OUTPUT 
+            array --> succesfull\n
+            false --> something wrong
+    '''
+    try:
+        all_test = db.session.query(User_register.name, User_register.surname, test).select_from(test).join(User_register, User_register.id == test.user_id).filter(or_(*[test.user_id.like(id) for id in ids])).all()
+        return all_test
+    except:
+        return False
 
 """
     Methods for mark table

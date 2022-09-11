@@ -1,0 +1,108 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+<html>
+    <body>
+        <form method="POST"> 
+           <fieldset id="main">
+                   <br>
+                   <div class="form-group">		
+                   <br><br>
+                   <select id = "tipo_test" name  = "tipo_test"  >
+                       <option>Tipo test</option>
+                       <option>Pectoral</option>
+                       <option>Sentadilla</option>
+                       <option>Peso muerto</option>
+                       <option>Cargada</option>
+                       <option>Arrancada</option>
+                       <option>Salto vertical</option>
+                   </select>
+                   <br><br>
+                   <select class="list-group" multiple id="ids" name = "ids">
+                       {% for x  in all_user: %}
+                         <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                       {% endfor %}
+                   </select>
+                   <br><br>
+                   <button class="btn btn-primary" >BUSCAR</button>
+                   </div>
+       </form>
+       <div class="container">
+            <canvas id="lineChart" > </canvas>
+        </div>
+        <br><br>
+        <table class="table " >
+            <thead class="thead-light">
+              <tr>
+                <th>1 RM</th>
+                <th>2 RM</th>
+                <th>3 RM</th>
+                <th>4 RM</th>
+                <th>5 RM</th>
+                <th>6 RM</th>
+                <th>7 RM</th>
+                <th>8 RM</th>
+                <th>9 RM</th>
+                <th>10 RM</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {% for y in actual %}
+                  {% for x in y %}
+                    <td>{{x}} </td>   
+                  {% endfor %}
+                {% endfor %}
+              </tr>
+            </tbody>
+            </table>  
+            <br><br>            
+    </body>
+<script>
+  function getRandomInt(max) {
+     return Math.floor(Math.random() * max);
+    }
+
+    var ctx = document.getElementById("lineChart").getContext("2d")
+    var lineChartDatasets = []
+    var lineChartlabels = []
+    var lineChartName = []
+    var tiempo = {{time | safe}}
+    var fecha = {{date | safe}}
+    //var names = {{names | safe}}    
+    
+    const statRecords = []
+    let count = 0;
+    //names.forEach(n => lineChartName.push(n))
+    fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
+    lineChartlabels.sort()
+    for(var i = 0; i < fecha.length;++i)
+    {
+        const record = []
+       for(var j = 0; j < fecha[i].length; ++j){
+            record.push({x:fecha[i][j],y:tiempo[i][j]})
+       }
+       statRecords.push(record)
+    }
+
+    tiempo.forEach(t => 
+    lineChartDatasets.push({
+            label: "Usuario " + count,//lineChartName[count],
+            data: statRecords[count++],
+            borderColor: "rgb(" + getRandomInt(256) + "," + getRandomInt(256) +" ,"+ getRandomInt(256) +")",
+            fill: false,
+            pointRadius: 5.5
+        }
+        ))
+
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data:{
+                datasets: lineChartDatasets,
+                labels:lineChartlabels
+            },
+        options:
+            {
+                Responsive: false
+            }
+        });
+</script>
+{% endblock %}

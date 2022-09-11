@@ -51,12 +51,13 @@
                     <option>Pertiga</option>
                     <option>Triple</option>
                 </select>	
-                {% if User_register.admin %}
-                <br>
-				<label for="mark" id="informacion" name="informacion">Introduce el codigo de usuario que deseas buscar </label>
-				<input type="text" class="form-control" id = "cod_usuario" name = "cod_usuario" />
-				<br>
-                {% endif %}
+                    <br><br>
+                    <select class="list-group" multiple id="ids" name = "ids">
+                        {% for x  in all_user: %}
+                          <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                        {% endfor %}
+                    </select>
+                <br><br>
 				<br>
 				<button class="btn btn-primary"> BUSCAR </button>
                 <div class="container">
@@ -66,10 +67,7 @@
 </body>	
 
 <script>
-    
-
-    function getRandomInt(max) 
-    {
+    function getRandomInt(max) {
      return Math.floor(Math.random() * max);
     }
 
@@ -80,30 +78,36 @@
         var lineChartDatasets = []
         var lineChartlabels = []
         var lineChartName = []
-        const record = []
+        const statRecords = []
         let count = 0;
         var tiempo = {{time | safe}}
         var fecha = {{date | safe}}
+        var names = {{names | safe}}    
         var maxmin = {{maxmin | safe}}
 
+        names.forEach(n => lineChartName.push(n))
 
-        fecha.forEach(f => lineChartlabels.push(f))
+        fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
 
         lineChartlabels.sort()
         for(var i = 0; i < fecha.length;++i)
         {
-            record.push({x:fecha[i],y:tiempo[i]})
+            const record = []
+            for(var j = 0; j < fecha[i].length; ++j){
+                record.push({x:fecha[i][j],y:tiempo[i][j]})
+            }
+            statRecords.push(record)
         }
 
-    
+        tiempo.forEach(t => 
         lineChartDatasets.push({
-                label: {{disciplina | safe}},
-                data: record ,
+                label: lineChartName[count],
+                data: statRecords[count++],
                 borderColor: "rgb(" + getRandomInt(256) + "," + getRandomInt(256) +" ,"+ getRandomInt(256) +")",
                 fill: false,
                 pointRadius: 5.5
-            })
-            
+            }
+            ))
 
         var myChart = new Chart(ctx, {
         type: 'line',
@@ -118,11 +122,11 @@
                         type: 'time',
                         time: {
                             bounds: 'data',
-                            parser: 'hh:mm:ss.SS',
+                            parser: 'hh:mm:ss.SSSSSS',
                             unit: 'minute',
                             unitStepSize: 0.10,
-                            min: maxmin[0],
-                            max: maxmin[1],
+                            min: '00:01:00',
+                            max: '00:05:00',
                             displayFormats: {
                                 'minute': 'mm:ss'
                             }
@@ -133,36 +137,43 @@
         });
     } 
 
-    function speed()
-    {
+    function speed(){
+        var ctx = document.getElementById("lineChart").getContext("2d")
+        var tiempo = {{time | safe}}
         var ctx = document.getElementById("lineChart").getContext("2d")
         var lineChartDatasets = []
         var lineChartlabels = []
         var lineChartName = []
-        const record = []
+        const statRecords = []
         let count = 0;
         var tiempo = {{time | safe}}
         var fecha = {{date | safe}}
+        var names = {{names | safe}}    
         var maxmin = {{maxmin | safe}}
 
+        names.forEach(n => lineChartName.push(n))
 
-        fecha.forEach(f => lineChartlabels.push(f))
+        fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
 
         lineChartlabels.sort()
         for(var i = 0; i < fecha.length;++i)
         {
-            record.push({x:fecha[i],y:tiempo[i]})
+            const record = []
+            for(var j = 0; j < fecha[i].length; ++j){
+                record.push({x:fecha[i][j],y:tiempo[i][j]})
+            }
+            statRecords.push(record)
         }
 
-    
+        tiempo.forEach(t => 
         lineChartDatasets.push({
-                label:  {{disciplina | safe}},
-                data: record ,
+                label: lineChartName[count],
+                data: statRecords[count++],
                 borderColor: "rgb(" + getRandomInt(256) + "," + getRandomInt(256) +" ,"+ getRandomInt(256) +")",
                 fill: false,
                 pointRadius: 5.5
-            })
-            
+            }
+            ))
 
         var myChart = new Chart(ctx, {
         type: 'line',
@@ -197,20 +208,34 @@
     var ctx = document.getElementById("lineChart").getContext("2d")
     var lineChartDatasets = []
     var lineChartlabels = []
+    var lineChartName = []
     var tiempo = {{time | safe}}
     var fecha = {{date | safe}}
-    let count = 0
+    var names = {{names | safe}}    
     
-    fecha.forEach(f => lineChartlabels.push(f))
+    const statRecords = []
+    let count = 0;
+    names.forEach(n => lineChartName.push(n))
+    fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
+    lineChartlabels.sort()
+    for(var i = 0; i < fecha.length;++i)
+    {
+        const record = []
+       for(var j = 0; j < fecha[i].length; ++j){
+            record.push({x:fecha[i][j],y:tiempo[i][j]})
+       }
+       statRecords.push(record)
+    }
 
+    tiempo.forEach(t => 
     lineChartDatasets.push({
-            label: "{{disciplina | safe}}",
-            data: tiempo,
+            label: lineChartName[count],
+            data: statRecords[count++],
             borderColor: "rgb(" + getRandomInt(256) + "," + getRandomInt(256) +" ,"+ getRandomInt(256) +")",
             fill: false,
             pointRadius: 5.5
-        })
-        
+        }
+        ))
 
         var myChart = new Chart(ctx, {
         type: 'line',
@@ -223,9 +248,7 @@
                 Responsive: false
             }
         });
-    }
-   
-
+}
 </script>
 
 <script>
@@ -272,6 +295,7 @@
     }      
  }
 
-</script>
 
+
+</script>
 {% endblock %}
