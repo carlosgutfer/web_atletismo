@@ -207,7 +207,7 @@
     {
     var ctx = document.getElementById("lineChart").getContext("2d")
     var lineChartDatasets = []
-    var lineChartlabels = []
+    var lineChartlabels = {{labels | safe}}
     var lineChartName = []
     var tiempo = {{time | safe}}
     var fecha = {{date | safe}}
@@ -216,17 +216,16 @@
     const statRecords = []
     let count = 0;
     names.forEach(n => lineChartName.push(n))
-    fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
-    lineChartlabels.sort()
-    for(var i = 0; i < fecha.length;++i)
+
+    for(var i = 0; i < tiempo.length;++i)
     {
         const record = []
-       for(var j = 0; j < fecha[i].length; ++j){
-            record.push({x:fecha[i][j],y:tiempo[i][j]})
+       for(var j = 0; j < tiempo[i].length; ++j){
+            record.push({x:fecha[i][j], y:tiempo[i][j]})
        }
        statRecords.push(record)
     }
-
+    
     tiempo.forEach(t => 
     lineChartDatasets.push({
             label: lineChartName[count],
@@ -248,7 +247,7 @@
                 Responsive: false
             }
         });
-}
+    }
 </script>
 
 <script>

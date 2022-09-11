@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import  check_password_hash
@@ -79,7 +80,14 @@ def view_marks_by_discipline():
                                 all_marks.append(answer)  
             if len(all_marks) == 0:
                  return render_template("view_marks_by_discipline_admin.html", User_register=current_user, tipo = 0, all_user = qdb.get_all_user())
-            return render_template("view_marks_by_discipline_admin.html", User_register=current_user, date = [x[0] for x in all_marks], time = [x[1] for x in all_marks], tipo = all_marks[0][2], maxmin = all_marks[0][3], names = [x[4][0] for x in all_marks], all_user = qdb.get_all_user())
+            labels = []
+            for x in all_marks:
+                for y in x[0]:
+                    labels.append(y)
+            dates = [datetime.datetime.strptime(ts, "%d/%m/%Y") for ts in labels]
+            dates.sort()
+            sorteddates = [datetime.datetime.strftime(ts, "%d/%m/%Y") for ts in dates]
+            return render_template("view_marks_by_discipline_admin.html", User_register=current_user, date = [x[0] for x in all_marks], time = [x[1] for x in all_marks], tipo = all_marks[0][2], maxmin = all_marks[0][3], names = [x[4][0] for x in all_marks], all_user = qdb.get_all_user(), labels = sorteddates )
         return render_template("view_marks_by_discipline_admin.html", User_register=current_user, tipo = 0, all_user = qdb.get_all_user())
     elif request.method == 'POST':
         id = current_user.id
