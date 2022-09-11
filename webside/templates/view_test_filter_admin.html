@@ -29,6 +29,8 @@
             <canvas id="lineChart" > </canvas>
         </div>
         <br><br>
+        {% for y in actual  %}
+        <h2>{{names[actual.index(y)] | safe}}</h2>
         <table class="table " >
             <thead class="thead-light">
               <tr>
@@ -46,14 +48,13 @@
             </thead>
             <tbody>
               <tr>
-                {% for y in actual %}
                   {% for x in y %}
                     <td>{{x}} </td>   
                   {% endfor %}
-                {% endfor %}
               </tr>
             </tbody>
             </table>  
+            {% endfor %}
             <br><br>            
     </body>
 <script>
@@ -67,13 +68,13 @@
     var lineChartName = []
     var tiempo = {{time | safe}}
     var fecha = {{date | safe}}
-    //var names = {{names | safe}}    
+    var names = {{names | safe}}    
     
     const statRecords = []
     let count = 0;
-    //names.forEach(n => lineChartName.push(n))
+    names.forEach(n => lineChartName.push(n))
     fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
-    //lineChartlabels.sort()
+    lineChartlabels = [...new Set(lineChartlabels)]
     for(var i = 0; i < fecha.length;++i)
     {
         const record = []
@@ -85,14 +86,14 @@
 
     tiempo.forEach(t => 
     lineChartDatasets.push({
-            label: "Usuario " + count,//lineChartName[count],
+            label: lineChartName[count],
             data: statRecords[count++],
             borderColor: "rgb(" + getRandomInt(256) + "," + getRandomInt(256) +" ,"+ getRandomInt(256) +")",
             fill: false,
             pointRadius: 5.5
         }
         ))
-
+        lineChartlabels.sort()
         var myChart = new Chart(ctx, {
         type: 'line',
         data:{

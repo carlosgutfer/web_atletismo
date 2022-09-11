@@ -224,7 +224,7 @@ def view_test_filter():
                     data.append(answer)
             if not data:
                 return render_template("view_test_filter_admin.html", User_register=current_user, all_user = qdb.get_all_user())
-            return render_template("view_test_filter_admin.html", User_register=current_user,date = [x[0] for x in data], time = [x[1] for x in data], actual =  [x[2] for x in data], all_user = qdb.get_all_user())
+            return render_template("view_test_filter_admin.html", User_register=current_user,date = [x[0] for x in data], time = [x[1] for x in data], actual =  [x[2] for x in data], all_user = qdb.get_all_user(), names = [x[3][0] for x in data])
     elif request.method == 'POST':
         data = qdb.get_mark_by_test(request.form.get('tipo_test'), id = current_user.id)
         if not data:

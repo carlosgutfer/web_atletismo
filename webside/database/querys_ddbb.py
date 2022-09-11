@@ -352,11 +352,12 @@ def get_mark_by_test(tipo_test, id):
             FALSE --> SOMETHING IS WRONG
     '''
     try:
-        all_marks =  test.query.with_entities(test.date, test.mark, test.repeticiones).filter_by(user_id = id, test_name = tipo_test).order_by(test.date.asc()).all()
+        all_marks = db.session.query(test.date, test.mark, test.repeticiones, User_register.name, User_register.surname).select_from(test).filter_by(user_id = id, test_name = tipo_test).join(User_register, User_register.id == test.user_id).order_by(test.date.asc()).all()               
         date = [row[0].strftime("%d/%m/%Y") for row in all_marks]
         time = [(row[1] / (1.0278 - 0.0278 * row[2])) for row in all_marks]
         actual = calculate_rm(time[-1])
-        return [date, time, actual]
+        user = np.unique([row[3] + " " +row[4] for row in all_marks])
+        return [date, time, actual, user]
     except:
         return False
 
