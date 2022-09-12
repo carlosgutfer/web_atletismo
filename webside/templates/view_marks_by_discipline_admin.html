@@ -126,7 +126,7 @@
                             unit: 'minute',
                             unitStepSize: 0.10,
                             min: '00:01:00',
-                            max: '00:05:00',
+                            max: '00:03:00',
                             displayFormats: {
                                 'minute': 'mm:ss'
                             }
@@ -189,9 +189,9 @@
                         time: {
                             parser: 'hh:mm:ss.SS',
                             unit: 'seconds',
-                            unitStepSize: 0.20,
-                            min: maxmin[0],
-                            max: maxmin[1],
+                            unitStepSize: 0.50,
+                            min: '00:00:10.00',
+                            max: '00:00:19.00',
                             displayFormats: {
                                 'seconds': 'ss.SS'
                             }
@@ -207,14 +207,15 @@
     {
     var ctx = document.getElementById("lineChart").getContext("2d")
     var lineChartDatasets = []
-    var lineChartlabels = {{labels | safe}}
     var lineChartName = []
+    var lineChartlabels = {{labels | safe}}
     var tiempo = {{time | safe}}
     var fecha = {{date | safe}}
     var names = {{names | safe}}    
     
     const statRecords = []
     let count = 0;
+
     names.forEach(n => lineChartName.push(n))
 
     for(var i = 0; i < tiempo.length;++i)
@@ -235,7 +236,7 @@
             pointRadius: 5.5
         }
         ))
-        
+
         var myChart = new Chart(ctx, {
         type: 'line',
         data:{
