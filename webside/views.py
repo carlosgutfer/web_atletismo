@@ -105,7 +105,6 @@ def view_marks_by_discipline():
     
     return render_template("view_marks_by_discipline.html", User_register=current_user, tipo = 0)
 
-
 @views.route('/delete_mark', methods=['POST', 'GET'])
 @login_required
 def delete_mark():
@@ -232,7 +231,14 @@ def view_test_filter():
                     data.append(answer)
             if not data:
                 return render_template("view_test_filter_admin.html", User_register=current_user, all_user = qdb.get_all_user())
-            return render_template("view_test_filter_admin.html", User_register=current_user,date = [x[0] for x in data], time = [x[1] for x in data], actual =  [x[2] for x in data], all_user = qdb.get_all_user(), names = [x[3][0] for x in data])
+            labels = []
+            for x in data:
+                for y in x[0]:
+                    labels.append(y)
+            dates = [datetime.datetime.strptime(ts, "%d/%m/%Y") for ts in labels]
+            dates.sort()
+            sorteddates = [datetime.datetime.strftime(ts, "%d/%m/%Y") for ts in dates]
+            return render_template("view_test_filter_admin.html", User_register=current_user,date = [x[0] for x in data], time = [x[1] for x in data], actual =  [x[2] for x in data], all_user = qdb.get_all_user(), names = [x[3][0] for x in data], labels = sorteddates)
     elif request.method == 'POST':
         data = qdb.get_mark_by_test(request.form.get('tipo_test'), id = current_user.id)
         if not data:
