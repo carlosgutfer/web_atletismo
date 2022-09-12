@@ -16,8 +16,14 @@ def create_app():
     db.init_app(app)
 
     from .views import  views
-    
+    from .marks import marks
+    from .test import test
+    from .technification import technification
+
+    app.register_blueprint(technification, url_prefix= '/')
     app.register_blueprint(views, url_prefix= '/')
+    app.register_blueprint(marks, url_prefix='/')
+    app.register_blueprint(test, url_prefix='/')
 
     create_database(app)
 
