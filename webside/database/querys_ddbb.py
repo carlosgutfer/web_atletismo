@@ -386,3 +386,4 @@ def insert_note(title, textarea, id):
         return True
     except:
         return False
+
