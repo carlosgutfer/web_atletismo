@@ -59,8 +59,7 @@ def logout():
 @views.route('/view_all')
 @login_required
 def view_all():
-    all_user = User_register.query.all()
-    return render_template("view_all.html",  User_register=current_user , all_user=all_user )
+    return render_template("view_all.html",  User_register=current_user , all_user= qdb.get_all_user())
 
 @views.route('/delete_user', methods=['POST', 'GET'])
 @login_required
@@ -68,8 +67,8 @@ def delete_user():
     if request.method == 'POST':
         cod_user =request.form.get('cod_user')
         name = request.form.get('firstName')
-        password = request.form.get('password')
         user = User_register.query.filter_by(id=cod_user, name = name).first()
+        password = request.form.get('password')
         if user:
              if check_password_hash(current_user.password, password):
                 db.session.delete(user)

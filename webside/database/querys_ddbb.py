@@ -6,6 +6,7 @@ from collections import Counter
 from ..models.User import Marca, User_register, test, Technification, Notes, test
 from .. import db 
 from sqlalchemy import or_
+import csv
 
 def calculate_rm(max):
     rm = []
@@ -42,7 +43,6 @@ def insert_mark(sector, competition_date, marca, disciplina, id):
         Output 
                 true --> succesfull\n
                 false --> something wrong \n
-    
     '''
     try:
         if sector in ['Lanzamientos', 'Saltos']:
@@ -216,9 +216,9 @@ def insert_user(name, password, admin, surname):
     '''
     try:
         if admin is not None:
-            admin = True
+           admin = True
         else:
-            admin = False
+           admin = False
         new_user = User_register(name=name, password=generate_password_hash(password, method='sha256'), admin = admin, surname=surname)
         db.session.add(new_user)
         db.session.commit()
@@ -231,6 +231,9 @@ def update_password(usuario, password):
     db.session.commit()
 
 def get_all_user():
+    '''
+        Return all records from User table
+    '''
     return db.session.query(User_register.id, User_register.name, User_register.surname).all()
 
 
@@ -383,3 +386,4 @@ def insert_note(title, textarea, id):
         return True
     except:
         return False
+
