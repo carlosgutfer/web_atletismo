@@ -234,7 +234,7 @@ def get_all_user():
     '''
         Return all records from User table
     '''
-    return db.session.query(User_register.id, User_register.name, User_register.surname).all()
+    return db.session.query(User_register.id, User_register.name, User_register.surname).order_by(User_register.name).all()
 
 
 """
@@ -386,4 +386,3 @@ def insert_note(title, textarea, id):
         return True
     except:
         return False
-
