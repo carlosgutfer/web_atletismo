@@ -8,7 +8,6 @@ marks = Blueprint('marks', __name__)
 @marks.route('/insert_mark', methods=['POST', 'GET'])
 @login_required
 def insert_mark():
-    qdb.prueba()
     if request.method == 'POST':
         sector = request.form.get('tipo_prueba')
         if sector != 'Fondo / Medio Fondo':
