@@ -66,7 +66,8 @@
     var ctx = document.getElementById("lineChart").getContext("2d")
     var lineChartDatasets = []
     var lineChartName = []
-    var lineChartlabels = {{labels | safe}}
+    var dias = {{labels | safe}}
+    var lineChartlabels = []
     var tiempo = {{time | safe}}
     var fecha = {{date | safe}}
     var names = {{names | safe}}    
@@ -75,6 +76,14 @@
     let count = 0;
 
     names.forEach(n => lineChartName.push(n))
+
+
+    dias.forEach(f => 
+        { 
+        if(!lineChartlabels.includes(f))
+            lineChartlabels.push(f)
+        
+        })
 
     for(var i = 0; i < tiempo.length;++i)
     {

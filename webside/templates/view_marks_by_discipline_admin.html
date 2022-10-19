@@ -207,7 +207,12 @@
 
         names.forEach(n => lineChartName.push(n))
 
-        fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
+        fecha.forEach(f => f.forEach(ff =>
+        { 
+        if(!lineChartlabels.includes(ff))
+            lineChartlabels.push(ff)
+        
+        }))
 
         lineChartlabels.sort()
         for(var i = 0; i < fecha.length;++i)
@@ -273,7 +278,12 @@
 
         names.forEach(n => lineChartName.push(n))
 
-        fecha.forEach(f => f.forEach(ff => lineChartlabels.push(ff)))
+        fecha.forEach(f => f.forEach(ff =>
+        { 
+        if(!lineChartlabels.includes(ff))
+            lineChartlabels.push(ff)
+        
+        }))
 
         lineChartlabels.sort()
         for(var i = 0; i < fecha.length;++i)
@@ -310,8 +320,8 @@
                             parser: 'hh:mm:ss.SS',
                             unit: 'seconds',
                             unitStepSize: 0.50,
-                            min: '00:00:10.00',
-                            max: '00:00:19.00',
+                            min: maxmin[0],
+                            max: maxmin[1],
                             displayFormats: {
                                 'seconds': 'ss.SS'
                             }
@@ -328,7 +338,8 @@
     var ctx = document.getElementById("lineChart").getContext("2d")
     var lineChartDatasets = []
     var lineChartName = []
-    var lineChartlabels = {{labels | safe}}
+    var lineChartlabels = []
+    var fecha = {{labels | safe}}
     var tiempo = {{time | safe}}
     var fecha = {{date | safe}}
     var names = {{names | safe}}    
@@ -337,7 +348,14 @@
     let count = 0;
 
     names.forEach(n => lineChartName.push(n))
-
+    
+    fecha.forEach(f => f.forEach(ff =>
+        { 
+        if(!lineChartlabels.includes(ff))
+            lineChartlabels.push(ff)
+        
+        }))
+    
     for(var i = 0; i < tiempo.length;++i)
     {
         const record = []
