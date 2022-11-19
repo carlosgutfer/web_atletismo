@@ -21,7 +21,9 @@ def insert_mark():
 @login_required
 def view_all_marks():
     if request.method == 'POST' and current_user.admin:
-            ids = request.form.getlist('ids')
+            ids = []
+            if 'seleccion a todos' not in request.form.getlist('ids'):
+                ids = request.form.getlist('ids')
             return render_template("view_all_marks_admin.html", User_register=current_user, marks = qdb.get_all_marks_admin(ids),all_user = qdb.get_all_user())
     elif request.method == 'GET'and current_user.admin:
         return render_template("view_all_marks_admin.html", User_register=current_user, marks = qdb.get_all_marks_admin([current_user.id]), all_user = qdb.get_all_user())
@@ -33,7 +35,10 @@ def view_marks_by_discipline():
     if request.method == 'GET' and current_user.admin:
         return render_template("view_marks_by_discipline_admin.html", User_register=current_user, tipo = 0, all_user = qdb.get_all_user())
     if request.method == 'POST' and current_user.admin:
-        ids = request.form.getlist('ids')
+        if 'seleccion a todos' not in request.form.getlist('ids'):
+            ids = request.form.getlist('ids')
+        else:
+            ids =[id[0] for id in  qdb.get_all_user()]
         tipo_prueba = request.form.get('tipo_prueba')
         if tipo_prueba != 'SECTORES':
             disciplina = request.form.get(tipo_prueba)

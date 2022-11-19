@@ -5,8 +5,9 @@
         <form  method = "POST" >
             <br><br>
             <select class="list-group" multiple id="ids" name = "ids">
+                    <option>seleccion a todos</option>
                 {% for x  in all_user: %}
-                  <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                    <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
                 {% endfor %}
             </select>
             <br><br>

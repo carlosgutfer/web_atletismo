@@ -76,3 +76,16 @@ def delete_user():
                 return render_template("delete_user.html", User_register=current_user, eliminado = True)
 
     return render_template("delete_user.html", User_register=current_user, eliminado = False)
+
+@views.route('/reset_pass', methods=['POST', 'GET'])
+@login_required
+def reset_pass():
+    if request.method == 'POST':
+        cod_user = request.form.get('user_id')
+        name = request.form.get('user_name')
+        user = User_register.query.filter_by(id=cod_user, name = name).first()
+        password = 'cal2022'
+        if user:
+            qdb.update_password(user, password)
+            return render_template("reset_pass.html", User_register=current_user, cambiada = True)
+    return render_template("reset_pass.html", User_register=current_user)

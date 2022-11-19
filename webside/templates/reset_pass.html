@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block title %}Reset password{% endblock %} {% block
+    content %}
+    <form method="POST">
+      <br><br>
+      <h3 aling="center">Reset password</h3>
+      <div class="form-group">
+        <label for="user_name">nombre usuario</label>
+        <input
+          type="text"
+          class="form-control"
+          id="user_name"
+          name="user_name"
+          placeholder="nombre usuario"
+        />
+      </div>
+      <br>
+      <div class="form-group">
+        <label for="user_id">Id usuario</label>
+        <input
+          type="text"
+          class="form-contro"l
+          id="user_id"
+          name="user_id"
+          placeholder="id usuario"
+        />
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary">Reiniciar contraseña</button>
+      {% if cambiada%}
+        <br><br>
+        <body>La contraseña ha sido reiniciada correctamente</body>
+      {% endif %}
+    </form>
+    {% endblock %}
