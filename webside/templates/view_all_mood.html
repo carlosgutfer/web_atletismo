@@ -1,0 +1,101 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+<html>
+    <body>
+       <div class="container">
+            <canvas id="lineChart" > </canvas>
+        </div>
+        <br><br>
+        {% for y in range(i) %}
+        <table class="table " >
+            <thead class="thead-light">
+              <tr>
+                <th>LUNES</th>
+                <th>MARTES</th>
+                <th>MIERCOLES</th>
+                <th>JUEVES</th>
+                <th>VIERNES</th>
+                <th>MEDIA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  {% for x in range(5) %}
+                    {%if all_moods[y][x] %}
+                      <td>{{all_moods[y][x].note}} </td>
+                    {%else%}
+                      <td>{{0}} </td>
+                    {%endif%}  
+                  {% endfor %}
+                    <td>{{media[y]}}</td>
+              </tr>
+            </tbody>
+            </table>  
+            {% endfor %}
+            <br><br>            
+    </body>
+<script>
+  function getRandomInt(max) {
+     return Math.floor(Math.random() * max);
+    }
+
+    var ctx = document.getElementById("lineChart").getContext("2d")
+    var lineChartDatasets = []
+    var lineChartName = []
+    var lineChartlabels = []
+    var tiempo = {{notes | safe}}
+    var fecha = {{fecha | safe}}
+    var names = {{names | safe}}    
+    
+    const statRecords = []
+    let count = 0;
+
+    names.forEach(n => lineChartName.push(n))
+    
+    fecha.forEach(f => f.forEach(ff =>
+        { 
+        if(!lineChartlabels.includes(ff))
+            lineChartlabels.push(ff)
+        
+        }))
+    
+    for(var i = 0; i < tiempo.length;++i)
+    {
+        const record = []
+       for(var j = 0; j < tiempo[i].length; ++j){
+            record.push({x:fecha[i][j], y:tiempo[i][j]})
+       }
+       statRecords.push(record)
+    }
+    
+    tiempo.forEach(t => 
+    lineChartDatasets.push({
+            label: lineChartName[count],
+            data: statRecords[count++],
+            borderColor: "rgb(" + getRandomInt(256) + "," + getRandomInt(256) +" ,"+ getRandomInt(256) +")",
+            fill: false,
+            pointRadius: 5.5
+        }
+        ))
+
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data:{
+                datasets: lineChartDatasets,
+                labels:lineChartlabels
+            },
+        options:
+            {
+                Responsive: false,
+                scales: {
+                    yAxes: [{
+                      ticks: {
+                                unitStepSize: 1,
+                                min: 1,
+                                max: 10    
+                              }
+                          }]
+                        }
+            }
+        });
+</script>
+{% endblock %}

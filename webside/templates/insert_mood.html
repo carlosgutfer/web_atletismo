@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+<html>
+    <body>
+        <form method="POST" >
+           <fieldset id="main">
+                   <br>
+                   <div class="form-group">		
+                   <br>
+                   <label for="pieceset_idname">Selecciona la fecha</label>
+                   <br>
+                   <input type="date" id = "sesion_date" name="sesion_date" />
+                   <br><br>
+                   <label>Nota</label><br>
+                   <select id = "mood_note" name  = "mood_note">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                   </select>
+                   <br><br>
+                   <button class="btn btn-primary" onclick="check_correct()">GUARDAR</button>
+                   </div>
+       </form>
+    </body>
+</html>
+<script>
+    function check_correct()
+    {
+        if(document.getElementById("sesion_date").value != ''  )
+                document.getElementById("myform").setAttribute("method", "POST")
+    }
+</script>
+{% endblock %}

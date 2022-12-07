@@ -13,6 +13,7 @@ class User_register(db.Model, UserMixin):
     test = db.relationship('test')
     group = db.relationship('Technification')
 
+
 class Marca(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sector = db.Column(db.String(10000))
@@ -41,3 +42,11 @@ class Notes(db.Model):
     title = db.Column(db.String(10000))
     texto = db.Column(db.String(10000))
     user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))
+
+class  Mood(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    note = db.Column(db.Integer)
+    week = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))
+

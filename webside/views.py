@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import  check_password_hash
-from .models.User import User_register
+from .models.bbdd import User_register
 from . import db
 from .database import querys_ddbb as qdb
 

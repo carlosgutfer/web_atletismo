@@ -3,7 +3,7 @@ from datetime import datetime
 import numpy as np
 from werkzeug.security import generate_password_hash
 from collections import Counter
-from ..models.User import Marca, User_register, test, Technification, Notes, test
+from ..models.bbdd import Marca, User_register, test, Technification, Notes, test, Mood
 from .. import db 
 from sqlalchemy import or_
 import csv
@@ -173,8 +173,6 @@ def get_marks_by_discipline_admin( tipo_prueba, disciplina, id):
             return [date, time, 3, maxmin, user]
     except:
         return False
-
-
 
 def delete_mark(id):
     ''' 
@@ -387,3 +385,41 @@ def insert_note(title, textarea, id):
     except:
         return False
 
+
+def insert_mood(date, note, week, id):
+    '''
+        def
+            Insert new record on note table
+        INPUT
+            TITLE --> STR\n
+            TEXTAREA --> STR\n
+            ID --> INT\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        mood = Mood(date = datetime.strptime(date, '%Y-%m-%d').date(), note =  note, week = week, user_id =  id)
+        db.session.add(mood)
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def view_all_moods(id):
+    '''
+        def
+            Insert new mood on mood table
+        INPUT
+            sesion_date --> date\n
+            mood_note --> int\n
+            ID --> INT\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        all_mods = Mood.query.filter_by(user_id = id).all()
+        return all_mods
+    except:
+        return False

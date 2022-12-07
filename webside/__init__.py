@@ -1,8 +1,8 @@
+from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from os import path
 from flask_login import LoginManager
-from datetime import timedelta
+from os import path
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -19,7 +19,9 @@ def create_app():
     from .marks import marks
     from .test import test
     from .technification import technification
+    from .moods import moods
 
+    app.register_blueprint(moods, url_prefix='/')
     app.register_blueprint(technification, url_prefix= '/')
     app.register_blueprint(views, url_prefix= '/')
     app.register_blueprint(marks, url_prefix='/')
@@ -29,7 +31,7 @@ def create_app():
 
    
     
-    from .models.User import User_register
+    from .models.bbdd import User_register
 
     login_manager = LoginManager()
     login_manager.login_view = 'views.home'

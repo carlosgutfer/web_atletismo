@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
-from .models.User import User_register, Technification
+from .models.bbdd import User_register, Technification
 from . import db
 from .database import querys_ddbb as qdb
 
