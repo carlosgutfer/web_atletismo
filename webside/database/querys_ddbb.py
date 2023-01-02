@@ -30,30 +30,6 @@ def calculate_rm(max):
         --> Get filter
         --> delete mark
 """
-def insert_mark(sector, competition_date, marca, disciplina, id):
-    '''
-        def
-                Insert mark on mark table
-        Input  
-                sector --> str\n
-                competition_date -->  str\n
-                marca --> str\n
-                disciplina -->  str\n
-                id --> int\n
-        Output 
-                true --> succesfull\n
-                false --> something wrong \n
-    '''
-    try:
-        if sector in ['Lanzamientos', 'Saltos']:
-            nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), meters = float(marca), user_id = id)
-        else:
-            nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), time = datetime.strptime(marca, '%M:%S.%f').time(), user_id = id)
-        db.session.add(nueva_marca)
-        db.session.commit()
-        return True
-    except:
-        return False
 
 def get_all_marks(id):
     '''
@@ -84,6 +60,31 @@ def get_all_marks_admin(ids):
     try:
         all_marks = db.session.query(User_register.name, User_register.surname, Marca).select_from(Marca).join(User_register, User_register.id == Marca.user_id).filter(or_(*[Marca.user_id.like(id) for id in ids])).all()
         return all_marks
+    except:
+        return False
+
+def insert_mark(sector, competition_date, marca, disciplina, id):
+    '''
+        def
+                Insert mark on mark table
+        Input  
+                sector --> str\n
+                competition_date -->  str\n
+                marca --> str\n
+                disciplina -->  str\n
+                id --> int\n
+        Output 
+                true --> succesfull\n
+                false --> something wrong \n
+    '''
+    try:
+        if sector in ['Lanzamientos', 'Saltos']:
+            nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), meters = float(marca), user_id = id)
+        else:
+            nueva_marca = Marca(sector = sector, disciplina = disciplina, date = datetime.strptime(competition_date, '%Y-%m-%d').date(), time = datetime.strptime(marca, '%M:%S.%f').time(), user_id = id)
+        db.session.add(nueva_marca)
+        db.session.commit()
+        return True
     except:
         return False
 
@@ -128,7 +129,6 @@ def get_marks_by_discipline( tipo_prueba, disciplina, id):
             return [date, time, 3, maxmin]
     except:
         return False
-
 
 def get_marks_by_discipline_admin( tipo_prueba, disciplina, id):
     '''
@@ -192,6 +192,16 @@ def delete_mark(id):
     except:
         return False
 
+def get_marks_for_pop():
+    all_marks_User = db.session.query(Marca,User_register.name,User_register.surname).select_from(Marca).join(User_register, User_register.id == Marca.user_id).order_by(Marca.date.asc()).all()            
+    all_test = {}
+    for marks in all_marks_User:
+        if all_test.get(marks.Marca.disciplina, 'none') == 'none':
+            all_test[(marks.Marca.disciplina[:-4])] = []
+            all_test[(marks.Marca.disciplina[:-4])].append(marks)
+        else:
+            all_test[(marks.Marca.disciplina[:-4])].append(marks)
+        return all_test
 """
     Methods for User table
 
@@ -385,6 +395,14 @@ def insert_note(title, textarea, id):
     except:
         return False
 
+"""
+    Methods for mood table
+
+        --> Insert
+        --> Get filter 
+        --> Get all 
+        --> delete test
+"""
 
 def insert_mood(date, note, week, id):
     '''
@@ -399,6 +417,10 @@ def insert_mood(date, note, week, id):
             FALSE --> SOMETHING IS WRONG
     '''
     try:
+        mood =  Mood.query.filter_by(user_id = id, date = date +' 00:00:00.000000').first()
+        if mood:
+            db.session.delete(mood)
+            db.session.commit()
         mood = Mood(date = datetime.strptime(date, '%Y-%m-%d').date(), note =  note, week = week, user_id =  id)
         db.session.add(mood)
         db.session.commit()
