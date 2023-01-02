@@ -19,12 +19,16 @@
             </thead>
             <tbody>
               <tr>
-                  {% for x in range(5) %}
-                    {%if all_moods[y][x] %}
-                      <td>{{all_moods[y][x].note}} </td>
-                    {%else%}
-                      <td>{{0}} </td>
-                    {%endif%}  
+                  {% for z in range(5) %}
+                      {%if z in dias_semana[y] %}
+                        {% for x in all_moods[y] %}
+                          {%if(x.date).weekday() == z %}
+                            <td>{{x.note}}</td>
+                          {% endif %}
+                        {% endfor %}
+                      {% else %}
+                      <td></td>
+                      {% endif %}
                   {% endfor %}
                     <td>{{media[y]}}</td>
               </tr>

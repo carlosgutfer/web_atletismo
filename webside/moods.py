@@ -31,9 +31,9 @@ def view_mood():
         else:
             all_moods.append(aux)
             aux = []
-            semana = x.week
-        if(x == moods[-1]):
             aux.append(x)
+            semana = x.week
+        if (x == moods[-1]):
             all_moods.append(aux)
     media = []
     for moods in all_moods:
@@ -54,7 +54,13 @@ def view_mood():
             if str(y.week) not in names:
                 names.append(str(y.week))
         fecha.append(aux1)
-        notes.append(aux2)         
+        notes.append(aux2)
+        dias_semana = []
+        for weeks in all_moods:
+            aux = [] 
+            for days in weeks: 
+                aux.append(days.date.weekday())
+            dias_semana.append(aux)         
     return render_template("view_all_mood.html", 
                             User_register=current_user, 
                             all_moods = all_moods, 
@@ -62,4 +68,5 @@ def view_mood():
                             notes = notes,
                             fecha = fecha,
                             names = names,
+                            dias_semana = dias_semana,
                             i = len(all_moods))
