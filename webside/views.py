@@ -4,12 +4,13 @@ from werkzeug.security import  check_password_hash
 from .models.bbdd import User_register
 from . import db
 from .database import querys_ddbb as qdb
-
+from .estadillos import estadillo_sub16_masculino_al,estadillo_sub16_femenino_al
 views = Blueprint('views', __name__)
-
+import csv
 
 @views.route('/', methods=['POST','GET'])
 def home():
+    
     if request.method == 'POST':
         user_cod = request.form.get('user_cod')
         password = request.form.get('password')
@@ -89,3 +90,10 @@ def reset_pass():
             qdb.update_password(user, password)
             return render_template("reset_pass.html", User_register=current_user, cambiada = True)
     return render_template("reset_pass.html", User_register=current_user)
+
+@views.route('/estadillos', methods=['POST', 'GET'])
+@login_required
+def estadillos():
+    estadillo_sub16_masculino_al(qdb.get_marks_for_pop())
+    estadillo_sub16_femenino_al(qdb.get_marks_for_pop())
+    return render_template("estadillos.html", User_register=current_user)

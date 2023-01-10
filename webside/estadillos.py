@@ -282,52 +282,51 @@ def estadillo_sub16_masculino_al(groups,f):
         - WRONG: False
     '''
     final_marks =  {
-                    '60m MASC': [],
-                    '100m MASC': [],
-                    '300m MASC': [],
-                    '60m vallas (0,91) Sub16-Master MASC': [],
-                    '60m vallas (0,91) MASC': [],
-                    '100m vallas (0,914) MASC': [],
-                    '110m vallas (0,914) MASC': [],
-                    '300m vallas (0,84) MASC': [],
-                    '600m MASC': [],
-                    '1.000m MASC': [],
-                    '3.000m MASC': [],
-                    'Disco (1kg) M': [],
-                    'Martillo (4kg) M': [],
-                    'Peso (4kg) MASC': [],
-                    'Jabalina (600g) M': [],
-                    'Longitud MASC': [],
-                    'Triple Salto MASC': [],
-                    'Altura MASC': [],
-                    'Pertiga MASC': []
+                    '60m MASC. PC': [],
+                    '100m MASC. AL': [],
+                    '300m FEM. AL': [],
+                    '60m vallas (0,91) Sub16-Master MASC. PC': [],
+                    '60m vallas (0,91) MASC. PC': [],
+                    '100m vallas (0,914) MASC. AL': [],
+                    '300m vallas (0,84) MASC. AL': [],
+                    '600m MASC. AL': [],
+                    '1.000m MASC. AL': [],
+                    '3.000m MASC. AL': [],
+                    'Disco (1kg) MASC.': [],
+                    'Martillo (4kg) MASC.': [],
+                    'Peso (4kg) MASC. AL': [],
+                    'Jabalina (600g) MASC.': [],
+                    'Longitud MASC. AL': [],
+                    'Triple Salto MASC. AL': [],
+                    'Altura MASC. AL': [],
+                    'Pertiga MASC. AL': []
                 }
 
     for group in groups:
         if group in final_marks.keys():
             aux = groups.get(group)
             for x in aux:
-                if x.Marca.sector == 'Lanzamientos':
+                if x.Marca.sector == 'Lanzamientos' and 'FEM' not in x.Marca.disciplina:
                     puntos = int(cp.calcular_puntos_lanzamientos_masc(x.Marca))
                     union = list(x)
                     union.insert(0,puntos)
                     final_marks[group].append(union)
-                elif x.Marca.sector == 'Saltos':
+                elif x.Marca.sector == 'Saltos' and 'FEM' not in x.Marca.disciplina:
                     puntos = int(cp.calcular_puntos_saltos_masc(x.Marca))
                     union = list(x)
                     union.insert(0,puntos)
                     final_marks[group].append(union)
-                elif x.Marca.sector == 'Vallas':
+                elif x.Marca.sector == 'Vallas' and 'FEM' not in x.Marca.disciplina:
                     puntos = int(cp.calcular_puntos_vallas_masc(x.Marca))
                     union = list(x)
                     union.insert(0,puntos)
                     final_marks[group].append(union)
-                elif x.Marca.sector == 'Velocidad':
+                elif x.Marca.sector == 'Velocidad' and 'FEM' not in x.Marca.disciplina:
                     puntos = int(cp.calcular_puntos_velocidad_masc(x.Marca))
                     union = list(x)
                     union.insert(0,puntos)
                     final_marks[group].append(union)
-                elif x.Marca.sector == 'Fondo / Medio Fondo':
+                elif x.Marca.sector == 'Fondo / Medio Fondo' and 'FEM' not in x.Marca.disciplina:
                     puntos = int(cp.calcular_puntos_fondo_masc(x.Marca))
                     union = list(x)
                     union.insert(0,puntos)
@@ -335,22 +334,22 @@ def estadillo_sub16_masculino_al(groups,f):
     estadillo = []
 
     #Unificar vallas y velocidad
-    final_marks['60m MASC' +'/100m MASC'] = []
-    final_marks['60m vallas (0,91) MASC' + '/100m vallas (0,914) MASC'] = []
+    final_marks['60m MASC. PC' +'/100m MASC. AL'] = []
+    final_marks['60m vallas (0,91) MASC. PC' + '/100m vallas (0,914) MASC. AL'] = []
     for key,values in final_marks.items():
-        if  key in ['60m MASC','100m MASC']:
+        if  key in ['60m MASC. PC','100m MASC. AL']:
             for marks in values:
-                final_marks['60m MASC' +'/100m MASC'].append(marks)
-        elif  key in ['60m vallas (0,91) Sub16-Master MASC','60m vallas (0,91) MASC','100m vallas (0,914) MASC']:
+                final_marks['60m MASC. PC' +'/100m MASC. AL'].append(marks)
+        elif  key in ['60m vallas (0,91) Sub16-Master MASC. PC','60m vallas (0,91) MASC. PC','100m vallas (0,914) MASC. AL']:
             for marks in values:
                 final_marks['60m vallas (0,91) MASC' + '/100m vallas (0,914) MASC'].append(marks)
                 
     #Borro vallas y velocidad suelta. Y ordeno ambos
-    borrar_valas_velocidad = ['60m MASC','100m MASC','60m vallas (0,91) MASC','60m vallas (0,91) Sub16-Master MASC','100m vallas (0,914) MASC']
+    borrar_valas_velocidad = ['60m MASC. PC','100m MASC. AL','60m vallas (0,91) MASC. PC','60m vallas (0,91) Sub16-Master MASC. PC','100m vallas (0,914) MASC. AL']
     for i in borrar_valas_velocidad:
         del final_marks[i]
-    final_marks['60m MASC/100m MASC'] = sorted(final_marks['60m MASC/100m MASC'], key = sorter)
-    final_marks['60m vallas (0,91) MASC/100m vallas (0,914) MASC'] = sorted(final_marks['60m vallas (0,91) MASC/100m vallas (0,914) MASC'], key =  sorter)
+    final_marks['60m MASC. PC/100m MASC. AL'] = sorted(final_marks['60m MASC. PC/100m MASC. AL'], key = sorter)
+    final_marks['60m vallas (0,91) MASC. PC/100m vallas (0,914) MASC. AL'] = sorted(final_marks['60m vallas (0,91) MASC. PC/100m vallas (0,914) MASC. AL'], key =  sorter)
 
     #Borrar huecos libres
     final_marks = borrar_huecos(final_marks)
@@ -361,19 +360,11 @@ def estadillo_sub16_masculino_al(groups,f):
             final_marks[key] = sorted(values, key = sorter)[::-1]
 
     final_marks = mejor_marca_atleta(final_marks)
-    for key,value in final_marks.items():
-        f.write('\n'+key)
-        for val in value:
-            f.write('\n'+str(val))
-        f.write('\n')
     for key,values in final_marks.items():
         values = sorted(values, key = sorter)
         estadillo.append(values[-1])
     estadillo,maximo = calculo_estadillo(final_marks)
-    for marca in estadillo:
-        f.write("\nDisciplina: " + marca[1].disciplina[:8] + " \t\tName: " + marca[2][:8] + " \tApellido: " + marca[3]  + " \t\t\tPuntos: " + str(marca[0]))
-    f.write("\nPuntaje total: " + str(maximo))
-   
+    
     
 def estadillo_sub16_femenino_al(groups,f):
     '''
@@ -386,23 +377,23 @@ def estadillo_sub16_femenino_al(groups,f):
         - WRONG: False
     '''
     final_marks =  {
-                    '60m FEM': [],
-                    '100m FEM': [],
-                    '300m FEM': [],
-                    '60m vallas (0,0762) FEM': [],
-                    '100m vallas (0,762) Sub18/Sub16 FEM': [],
-                    '300m vallas (0,762) FEM': [],
-                    '600m FEM': [],
-                    '1.000m FEM': [],
-                    '3.000m FEM': [],
-                    'Disco (800g)': [],
-                    'Martillo (3kg) F': [],
-                    'Peso (3kg) FEM': [],
-                    'Jabalina (500g) ': [],
-                    'Longitud FEM': [],
-                    'Triple Salto FEM': [],
-                    'Altura FEM': [],
-                    'Pertiga FEM': []
+                    '60m FEM. PC': [],
+                    '100m FEM. AL': [],
+                    '300m FEM. AL': [],
+                    '60m vallas (0,0762) FEM. PC': [],
+                    '100m vallas (0,762) Sub18/Sub16 FEM. AL': [],
+                    '300m vallas (0,762) FEM. AL': [],
+                    '600m FEM. AL': [],
+                    '1.000m FEM. AL': [],
+                    '3.000m FEM. AL': [],
+                    'Disco (800g) FEM.': [],
+                    'Martillo (3kg) FEM.': [],
+                    'Peso (3kg) FEM. PC': [],
+                    'Jabalina (500g) FEM.': [],
+                    'Longitud FEM. AL': [],
+                    'Triple Salto FEM. AL': [],
+                    'Altura FEM. AL': [],
+                    'Pertiga FEM. AL': []
                 }
 
     for group in groups:
@@ -437,22 +428,22 @@ def estadillo_sub16_femenino_al(groups,f):
     estadillo = []
 
     #Unificar vallas y velocidad
-    final_marks['60m FEM' +'/100m FEM'] = []
-    final_marks['60m vallas (0,0762) FEM' + '/100m vallas (0,762) Sub18/Sub16 FEM'] = []
+    final_marks['60m FEM. PC' +'/100m FEM. AL'] = []
+    final_marks['60m vallas (0,0762) FEM. PC' + '/100m vallas (0,762) Sub18/Sub16 FEM. AL'] = []
     for key,values in final_marks.items():
-        if  key in ['60m FEM','100m FEM']:
+        if  key in ['60m FEM. PC','100m FEM. AL']:
             for marks in values:
-                final_marks['60m FEM' +'/100m FEM'].append(marks)
-        elif  key in ['60m vallas (0,0762) FEM','100m vallas (0,762) Sub18/Sub16 FEM']:
+                final_marks['60m FEM. PC' +'/100m FEM. AL'].append(marks)
+        elif  key in ['60m vallas (0,0762) FEM. PC','100m vallas (0,762) Sub18/Sub16 FEM. AL']:
             for marks in values:
-                final_marks['60m vallas (0,0762) FEM' + '/100m vallas (0,762) Sub18/Sub16 FEM'].append(marks)
+                final_marks['60m vallas (0,0762) FEM. PC' + '/100m vallas (0,762) Sub18/Sub16 FEM. AL'].append(marks)
                 
     #Borro vallas y velocidad suelta. Y ordeno ambos
-    borrar_valas_velocidad = ['60m FEM','100m FEM','60m vallas (0,0762) FEM','100m vallas (0,762) Sub18/Sub16 FEM']
+    borrar_valas_velocidad = ['60m FEM. PC','100m FEM. AL','60m vallas (0,0762) FEM. PC','100m vallas (0,762) Sub18/Sub16 FEM. AL']
     for i in borrar_valas_velocidad:
         del final_marks[i]
-    final_marks['60m FEM/100m FEM'] = sorted(final_marks['60m FEM/100m FEM'], key = sorter)
-    final_marks['60m vallas (0,0762) FEM/100m vallas (0,762) Sub18/Sub16 FEM'] = sorted(final_marks['60m vallas (0,0762) FEM/100m vallas (0,762) Sub18/Sub16 FEM'], key =  sorter)
+    final_marks['60m FEM. PC/100m FEM. AL'] = sorted(final_marks['60m FEM. PC/100m FEM. AL'], key = sorter)
+    final_marks['60m vallas (0,0762) FEM. PC/100m vallas (0,762) Sub18/Sub16 FEM. AL'] = sorted(final_marks['60m vallas (0,0762) FEM. PC/100m vallas (0,762) Sub18/Sub16 FEM. AL'], key =  sorter)
 
     #Borrar huecos libres
     final_marks = borrar_huecos(final_marks)
@@ -463,15 +454,7 @@ def estadillo_sub16_femenino_al(groups,f):
             final_marks[key] = sorted(values, key = sorter)[::-1]
 
     final_marks = mejor_marca_atleta(final_marks)
-    for key,value in final_marks.items():
-        f.write('\n'+key)
-        for val in value:
-            f.write('\n'+str(val))
-        f.write('\n')
     for key,values in final_marks.items():
         values = sorted(values, key = sorter)
         estadillo.append(values[-1])
     estadillo,maximo = calculo_estadillo(final_marks)
-    for marca in estadillo:
-        f.write("\nDisciplina: " + marca[1].disciplina[:8] + " \t\tName: " + marca[2][:8] + " \tApellido: " + marca[3]  + " \t\t\tPuntos: " + str(marca[0]))
-    f.write("\nPuntaje total: " + str(maximo))

@@ -192,13 +192,13 @@ def delete_mark(id):
     except:
         return False
 
-def get_marks_for_pop(club):
+def get_marks_for_pop(club = 'Atletismo Leganes'):
     all_marks_User = db.session.query(Marca,User_register.name,User_register.surname).select_from(Marca).join(User_register, User_register.id == Marca.user_id).filter_by(club = club).order_by(Marca.time.desc(), Marca.meters.desc()).distinct()            
     all_test = {}
     for marks in all_marks_User:
-        if all_test.get(marks.Marca.disciplina[:-4]) is None:
-            all_test[(marks.Marca.disciplina[:-4])] = [] 
-        all_test[(marks.Marca.disciplina[:-4])].append(marks)
+        if all_test.get(marks.Marca.disciplina) is None:
+            all_test[marks.Marca.disciplina] = [] 
+        all_test[marks.Marca.disciplina].append(marks)
     return all_test
 """
     Methods for User table
