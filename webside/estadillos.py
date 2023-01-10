@@ -271,7 +271,7 @@ def calculo_estadillo(final_marks):
     maximo = np.sum(np.array([marca[0] for marca in estadillo]))
     return [estadillo,maximo]
 
-def estadillo_sub16_masculino_al(groups,f):
+def estadillo_sub16_masculino_al(groups):
     '''
     def 
     return list with the best marks 
@@ -366,7 +366,7 @@ def estadillo_sub16_masculino_al(groups,f):
     estadillo,maximo = calculo_estadillo(final_marks)
     
     
-def estadillo_sub16_femenino_al(groups,f):
+def estadillo_sub16_femenino_al(groups):
     '''
     def 
     return list with the best marks 
