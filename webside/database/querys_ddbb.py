@@ -192,16 +192,14 @@ def delete_mark(id):
     except:
         return False
 
-def get_marks_for_pop():
-    all_marks_User = db.session.query(Marca,User_register.name,User_register.surname).select_from(Marca).join(User_register, User_register.id == Marca.user_id).order_by(Marca.date.asc()).all()            
+def get_marks_for_pop(club):
+    all_marks_User = db.session.query(Marca,User_register.name,User_register.surname).select_from(Marca).join(User_register, User_register.id == Marca.user_id).filter_by(club = club).order_by(Marca.time.desc(), Marca.meters.desc()).distinct()            
     all_test = {}
     for marks in all_marks_User:
-        if all_test.get(marks.Marca.disciplina, 'none') == 'none':
-            all_test[(marks.Marca.disciplina[:-4])] = []
-            all_test[(marks.Marca.disciplina[:-4])].append(marks)
-        else:
-            all_test[(marks.Marca.disciplina[:-4])].append(marks)
-        return all_test
+        if all_test.get(marks.Marca.disciplina[:-4]) is None:
+            all_test[(marks.Marca.disciplina[:-4])] = [] 
+        all_test[(marks.Marca.disciplina[:-4])].append(marks)
+    return all_test
 """
     Methods for User table
 
@@ -209,7 +207,7 @@ def get_marks_for_pop():
         --> update_password: Set new password record for  User table
         --> get_all_user: Get all records from User table
 """
-def insert_user(name, password, admin, surname):
+def insert_user(name, password, admin, surname,club = 'Atletismo Leganes'):
     '''
         def 
             Insert new user 
@@ -227,7 +225,7 @@ def insert_user(name, password, admin, surname):
            admin = True
         else:
            admin = False
-        new_user = User_register(name=name, password=generate_password_hash(password, method='sha256'), admin = admin, surname=surname)
+        new_user = User_register(name=name, password=generate_password_hash(password, method='sha256'), admin = admin, surname=surname,club= club)
         db.session.add(new_user)
         db.session.commit()
         return True
