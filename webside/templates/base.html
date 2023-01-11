@@ -73,8 +73,6 @@
               <a class="dropdown-item" href="/change_pass">CAMBIAR CONTRASEÑA</a>
             </div>
           </li>  
-
-          {% if User_register.admin %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
               ESTADILLOS
@@ -83,6 +81,7 @@
               <a class="dropdown-item" href="/estadillos">CREAR NUEVO ESTADILLO</a>
             </div>
           </li>
+          {% if User_register.admin %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
               GRUPOS TECNIFICACIÓN
