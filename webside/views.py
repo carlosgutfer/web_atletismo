@@ -94,6 +94,6 @@ def reset_pass():
 @views.route('/estadillos', methods=['POST', 'GET'])
 @login_required
 def estadillos():
-    estadillo_sub16_masculino_al(qdb.get_marks_for_pop())
-    estadillo_sub16_femenino_al(qdb.get_marks_for_pop())
-    return render_template("estadillos.html", User_register=current_user)
+    estadillo_masc, max_masc = estadillo_sub16_masculino_al(qdb.get_marks_for_pop())
+    estadillo_fem, max_fem = estadillo_sub16_femenino_al(qdb.get_marks_for_pop())
+    return render_template("estadillos.html", User_register=current_user, estadillo_fem = estadillo_fem, estadillo_masc = estadillo_masc, max_masc = max_masc, max_fem = max_fem)

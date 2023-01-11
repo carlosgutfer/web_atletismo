@@ -3,6 +3,7 @@
 <html>
     
     <br><br>
+    <!--
     <select class="selectpicker" multiple id = "Velocidad">
         <option>50m FEM. AL</option>
         <option>50m FEM. PC</option>
@@ -155,6 +156,15 @@
         <option>3.000m Marcha FEM. en pista</option>
         <option>3.000m Marcha MASC. en pista</option>
         <option>3km Marcha FEM. RUTA</option>
-    </select>
+    </select>-->
+
+    {% for x in estadillo_masc %}
+        <p>{{x[0]}} - {{x[1].disciplina}} - {{x[2]}} - {{x[3]}}</p>
+    {% endfor %}
+    <h3>{{max_masc}} </h3>
+    {% for x in estadillo_fem %}
+        <p>{{x[0]}} - {{x[1].disciplina}} - {{x[2]}} - {{x[3]}}</p>
+    {% endfor %}
+    <h3>{{max_fem}} </h3>
 </html>
 {% endblock %}

@@ -97,3 +97,13 @@ def calcular_puntos_fondo_fem(marca):
         return 0.0382 * (330 - seconds) ** 2
     elif '3.000m FEM. AL' in marca.disciplina:
         return 0.002539 * (1200 - seconds) ** 2 
+
+def calcular_puntos_marcha_masc(marca):
+    seconds = float(datetime.timedelta(hours=marca.time.hour, minutes=marca.time.minute, seconds=marca.time.second, milliseconds=marca.time.microsecond/1000).total_seconds())
+    if '5.000m Marcha MASC. en pista' in marca.disciplina:
+        return 0.001209 * (1650 - seconds) ** 2
+
+def calcular_puntos_marcha_fem(marca):
+    seconds = float(datetime.timedelta(hours=marca.time.hour, minutes=marca.time.minute, seconds=marca.time.second, milliseconds=marca.time.microsecond/1000).total_seconds())
+    if '3.000m Marcha FEM. en pista' in marca.disciplina:
+        return 0.000881 * (1871 - seconds) ** 2
