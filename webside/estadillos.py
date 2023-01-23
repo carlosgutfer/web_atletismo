@@ -1,6 +1,6 @@
 from . import calculos_puntos as cp
 import numpy as np
-
+import copy
 
 def sorter(item):
     return (item[0])
@@ -11,7 +11,54 @@ def borrar_huecos(final_marks):
         del final_marks[i]
     return final_marks
 
+def borrar_marca(estadillo_posible):
+    borrar_marca = {}
+    for key,value in estadillo_posible.items():
+        for key_2, value_2 in estadillo_posible.items():
+            if key != key_2:
+                nombre = value[2] + value[3] 
+                if value[2] + value[3] == value_2[2] + value_2[3] and value < value_2:
+                    borrar_marca[key] = value
+    borrar_peor = []
+    for key, values in borrar_marca.items():
+         for key_2, values_2 in borrar_marca.items():
+            if values[0] > values_2[0] and values_2[2] + values_2[3] == values[2] + values[3]:
+                if key_2 not in borrar_peor:
+                    borrar_peor.append(key_2)
+    for datos in borrar_peor:
+        del borrar_marca[datos]
+    if len(borrar_peor) > 0:
+        borrar_marca = borrar_huecos(borrar_marca)
+
+    return borrar_marca
+
+def comprobar_fin(resultado, check_name,final_marks):
+    estadillo = []
+    fin = False
+    for key,values in resultado[4].items():
+        estadillo.append(values)
+    for key,values in check_name.items():
+        estadillo.append(values[0])
+    nombres_apellidos = [marca[2] + marca[3] for marca in estadillo]
+    if len(nombres_apellidos) != len(set(nombres_apellidos)):
+        return estadillo, fin 
+    prueba_participante = [marca[1].disciplina  for marca in estadillo]
+    for key,value in final_marks.items():
+        modificacion = False
+        for marcas in value:
+            nombre =  marcas[2] + marcas[3]
+            if nombre  in nombres_apellidos:
+                fin = True
+                if prueba_participante[nombres_apellidos.index(nombre)] == key or prueba_participante[nombres_apellidos.index(nombre)] in '60m MASC. PC/100m MASC. AL':
+                    break    
+                if modificacion:
+                    fin = False
+            else:
+                modificacion = True
+    return estadillo, fin 
+
 def mejor_marca_atleta(final_marks):
+    #Deja solo la mejor marca de cada atleta en cada prueba
     for key,values in final_marks.items():
         valores_eliminar = []
         for i in range(len(values)):
@@ -41,9 +88,10 @@ def buscar_estadillo_aux(copia_marks_sin_unos,mejor_estadillo, j, contador, long
             todos_nombres_apellidos = [value[2] + ' ' +value[3] for key,value in estadillo_posible.items()] 
             mejor_estadillo[j][0] += 1
             if len(set(todos_nombres_apellidos)) == len(todos_nombres_apellidos):
-                break
+                return [copia_marks_sin_unos,mejor_estadillo, j, contador,estadillo_posible]
             if len(set(todos_nombres_apellidos)) == longitud_inferior:
-                break
+                return borrar_marca(estadillo_posible)
+                
         else:
             mejor_estadillo[j][0] = 0
             if j + 1 <  len(mejor_estadillo):
@@ -105,28 +153,26 @@ def calculo_pruebas_con_varios_participantes(final_marks):
 
     #Calculo un primer estadillo sin repeticion
     estadillo_posible = [copia_marks_sin_unos,mejor_estadillo,0,0]
-    maximo_actual = 0
     resultado = []
     contador = 0
-    maximo_individual =  sum([value[0][0] for key,value in check_name.items()])
-    while(estadillo_posible[3] < 10000):
-        estadillo_posible = buscar_estadillo_aux(estadillo_posible[0],estadillo_posible[1],estadillo_posible[2],estadillo_posible[3], longitud_inferior)
-        maximo = sum([value[0] for key,value in estadillo_posible[4].items()]) + maximo_individual
-        if maximo > maximo_actual:
-            maximo_actual = maximo 
-            contador +=1
-            resultado = estadillo_posible[4]
+    estadillo_posible = buscar_estadillo_aux(estadillo_posible[0],estadillo_posible[1],estadillo_posible[2],estadillo_posible[3], longitud_inferior)
+    if isinstance(estadillo_posible,dict):
+        return estadillo_posible
+    contador +=1
+    resultado = estadillo_posible[4]
 
     #Compruebo si tengo que borrar algun atleta del estadillo posible porque me interesa mejor su marca individual
     borrar_de_check_name = []
+    nombres_check_name = [value[0][2] + value[0][3] for key, value in check_name.items()]
     for key_resultado,atletas in resultado.items():
         for key,value in check_name.items():
             if atletas[2] + atletas[3] == value[0][2] + value[0][3]:
                 for values_marks in final_marks[key_resultado]:
                     if values_marks[2] +values_marks[3] != atletas[2] + atletas[3]:
                         if values_marks[0] < atletas[0] and values_marks[0] + value[0][0] > atletas[0]:
-                            if [key_resultado,atletas] not in borrar_de_check_name:
-                                borrar_de_check_name.append([key_resultado,atletas])
+                            if values_marks[2] +values_marks[3] not in  nombres_check_name:
+                                if [key_resultado,atletas] not in borrar_de_check_name:
+                                    borrar_de_check_name.append([key_resultado,atletas])
     return borrar_de_check_name,check_name, estadillo_posible
 
 def comprobar_si_mejor_marca_usuario(final_marks,borrar_de_check_name):
@@ -168,6 +214,20 @@ def borrar_duplicados_unico_usuario(check_name,final_marks):
         final_marks = borrar_huecos(final_marks)
         check_name = borrar_huecos(check_name)
     return final_marks,check_name
+
+def mejor_marca_unico_usuario_por_prueba(final_marks):
+    #Si hay un usuario que es único en varias pruebas. Voy a dejar solo en la prueba donde tenga más puntos
+    borrar_peor = []
+    for key, values in final_marks.items():
+         for key_2, values_2 in final_marks.items():
+            if values[0][0] < values_2[0][0] and values_2[0][2] + values_2[0][3] == values[0][2] + values[0][3]:
+                if [key,values] not in borrar_peor:
+                    borrar_peor.append([key,values])
+    for datos in borrar_peor:
+        final_marks[datos[0]].remove(datos[1][0])
+    if len(borrar_peor) > 0:
+        final_marks = borrar_huecos(final_marks)
+    return final_marks
 
 def comprobar_mejor_combinacion(final_marks,check_name):
     # Compruebo en las pruebas que tienen más de un usuario el usuario seleccionado es su mejor marca combianda,
@@ -253,45 +313,41 @@ def calculo_estadillo(final_marks):
     copia_check_name = {}
     maximo = 0
     fin = False
+    contador = 0
     while True:
-        romper_while = False
+        contador += 1
         borrar_de_check_name = True
+        if sum(len(value) for key, value in final_marks.items()) == len(final_marks):
+            final_marks = mejor_marca_unico_usuario_por_prueba(final_marks)
+            estadillo = [values[0] for key,values in final_marks.items()]
+            maximo = np.sum(np.array([marca[0] for marca in estadillo]))
+            return [estadillo,maximo]
         while borrar_de_check_name != []:
-            borrar_de_check_name,check_name, resultado = calculo_pruebas_con_varios_participantes(final_marks)
+            calculo = calculo_pruebas_con_varios_participantes(final_marks)
+            if isinstance(calculo,dict):
+                for key,value in calculo.items():
+                    final_marks[key].remove(value)
+                continue
+            borrar_de_check_name,check_name, resultado = calculo
             if borrar_de_check_name != []:
                 for datos in borrar_de_check_name:
                     final_marks[datos[0]].remove(datos[1])
-
         final_marks = comprobar_si_mejor_marca_usuario(final_marks, check_name)
         check_name = borrar_huecos(check_name)
         final_marks = comprobar_mejor_combinacion(final_marks,check_name)
         final_marks = borrar_huecos(final_marks)
         final_marks, check_name = borrar_duplicados_unico_usuario(check_name,final_marks)
+        mod, resultado,final_marks = modificar_valor(resultado,final_marks)
+        estadillo, fin = comprobar_fin(resultado, check_name,final_marks)
+        if contador == 100:
+            break
+        if fin:
+            break
         if copia_final_marks == final_marks and check_name == copia_check_name:
             mod = True
-            volver_probar = False
             while(mod != {}):
                 mod, resultado,final_marks = modificar_valor(resultado,final_marks)
-                if mod != {}:
-                    estadillo = []
-                    for key,values in resultado[4].items():
-                        estadillo.append(values)
-                    for key,values in check_name.items():
-                        estadillo.append(values[0])
-                    nombres_apellidos = [marca[2] + marca[3] for marca in estadillo]
-                    prueba_participante = [marca[1].disciplina  for marca in estadillo]
-                    for key,value in final_marks.items():
-                        modificacion = False
-                        for marcas in value:
-                            nombre =  marcas[2] + marcas[3]
-                            if nombre  in nombres_apellidos:
-                                fin = True
-                                if prueba_participante[nombres_apellidos.index(nombre)] == key:
-                                    break    
-                                if modificacion:
-                                    fin = False
-                            else:
-                                modificacion = True
+                estadillo, fin = comprobar_fin(resultado, check_name,final_marks)
                 if fin:
                     mod = {}
             if fin:  
@@ -299,8 +355,6 @@ def calculo_estadillo(final_marks):
         else:
             copia_final_marks = final_marks
             copia_check_name = check_name
-
-
     maximo = np.sum(np.array([marca[0] for marca in estadillo]))
     return [estadillo,maximo]
 
@@ -396,11 +450,11 @@ def estadillo_sub16_masculino_al(groups):
     for key,values in final_marks.items():
         values = sorted(values, key = sorter)
         estadillo.append(values[-1])
+    copia = copy.deepcopy(final_marks)
     estadillo,maximo = calculo_estadillo(final_marks)
     
-    return estadillo, maximo
-
-    
+    return estadillo, maximo, copia
+  
 def estadillo_sub16_femenino_al(groups):
     '''
     def 
@@ -492,6 +546,10 @@ def estadillo_sub16_femenino_al(groups):
     for key,values in final_marks.items():
         values = sorted(values, key = sorter)
         estadillo.append(values[-1])
+    copia = final_marks
     estadillo,maximo = calculo_estadillo(final_marks)
 
-    return estadillo, maximo
+    return estadillo, maximo, copia
+
+
+
