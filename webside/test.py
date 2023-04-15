@@ -19,7 +19,11 @@ def view_all_test():
 @login_required
 def insert_test():
     if request.method == 'POST':
-        qdb.insert_test(request.form.get('tipo_test'), request.form.get('sesion_date'),  request.form.get('repeticiones'), request.form.get('marca'), current_user.id)
+        tipo_test = request.form.get('tipo_test')
+        repeticiones = request.form.get('repeticiones')
+        if tipo_test == "Velocidad lanzada":
+            repeticiones = 1
+        qdb.insert_test(tipo_test, request.form.get('sesion_date'),  repeticiones, request.form.get('marca'), current_user.id)
     return render_template("insert_test.html", User_register=current_user)
 
 @test.route('/view_test_filter', methods=['POST','GET'])
@@ -30,6 +34,8 @@ def view_test_filter():
     elif request.method == 'POST' and current_user.admin:
             data = []
             ids = request.form.getlist('ids')
+            if ids == []:
+                ids = [current_user.id]
             for id in ids:
                 answer = qdb.get_mark_by_test(request.form.get('tipo_test'), id)
                 if  answer:
