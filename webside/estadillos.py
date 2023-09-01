@@ -339,10 +339,11 @@ def calculo_estadillo(final_marks):
         final_marks, check_name = borrar_duplicados_unico_usuario(check_name,final_marks)
         mod, resultado,final_marks = modificar_valor(resultado,final_marks)
         estadillo, fin = comprobar_fin(resultado, check_name,final_marks)
-        if contador == 100:
-            break
         if fin:
             break
+
+
+
         if copia_final_marks == final_marks and check_name == copia_check_name:
             mod = True
             while(mod != {}):
@@ -355,6 +356,11 @@ def calculo_estadillo(final_marks):
         else:
             copia_final_marks = final_marks
             copia_check_name = check_name
+    
+    
+    
+        if contador == 10000:
+            break
     maximo = np.sum(np.array([marca[0] for marca in estadillo]))
     return [estadillo,maximo]
 
@@ -546,7 +552,7 @@ def estadillo_sub16_femenino_al(groups):
     for key,values in final_marks.items():
         values = sorted(values, key = sorter)
         estadillo.append(values[-1])
-    copia = final_marks
+    copia = copy.deepcopy(final_marks)
     estadillo,maximo = calculo_estadillo(final_marks)
 
     return estadillo, maximo, copia

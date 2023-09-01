@@ -20,7 +20,6 @@ def home():
                 if check_password_hash(user.password, password):
                     flash('Logged in successfully!', category='success')
                     login_user(user, remember=True)
-                    session.permanent = True
                     return render_template("home.html", User_register=current_user, data = qdb.get_notes())
         else:
             if request.form.get('title'):
@@ -94,6 +93,52 @@ def reset_pass():
 @views.route('/estadillos', methods=['POST', 'GET'])
 @login_required
 def estadillos():
-    estadillo_masc, max_masc = estadillo_sub16_masculino_al(qdb.get_marks_for_pop())
-    estadillo_fem, max_fem = estadillo_sub16_femenino_al(qdb.get_marks_for_pop())
-    return render_template("estadillos.html", User_register=current_user, estadillo_fem = estadillo_fem, estadillo_masc = estadillo_masc, max_masc = max_masc, max_fem = max_fem)
+ with open(r'C:/WEB_ATLETISMO/club.csv', newline= '') as csvfile:
+        copia = []
+        spamreader = csv.reader(csvfile, delimiter=';')
+        copia = [a for a in spamreader]
+        copia[0] = [copia[0][0][3:]]
+        with open('readme.txt', 'w') as f:
+            for user in copia:
+                f.write("\n=============" + user[0] +  "=============")
+                marcas = qdb.get_marks_for_pop(user[0])
+                print(user[0])
+                if len(marcas) != 0:
+                    estadillo_masc, max_masc, final_marks =estadillo_sub16_masculino_al(marcas)
+                    nombres_apellidos = [[mark[2] + mark[3], mark[1].disciplina] for mark in estadillo_masc]
+                    for key,value in final_marks.items():
+                        f.write("\n" +str(key)) 
+                        for marks in value:
+                            nombre =  marks[2] + marks[3]
+                            for x in nombres_apellidos:
+                                if nombre  == x[0]:
+                                    f.write("\n" +str(marks) + " -- " + x[1])
+                                    break
+                                elif x == nombres_apellidos[-1]:
+                                    f.write("\n" +str(marks))   
+                    f.write("\n==============estadillo=================")
+                    for marcas_finales in estadillo_masc:
+                        f.write('\n' + str(marcas_finales))
+                    f.write('\n' + str(max_masc))
+                try:
+                        estadillo_fem,max_fem,final_marks =  estadillo_sub16_femenino_al(marcas)
+                        nombres_apellidos = [[mark[2] + mark[3], mark[1].disciplina]for mark in estadillo_fem]
+                        for key,value in final_marks.items():
+                            f.write("\n" +str(key)) 
+                            for marks in value:
+                                nombre =  marks[2] + marks[3]
+                                for x in nombres_apellidos:
+                                    if nombre  == x[0]:
+                                        f.write("\n" +str(marks) + " -- " + x[1])
+                                        break
+                                    elif x == nombres_apellidos[-1]:
+                                        f.write("\n" +str(marks))   
+                        f.write("\n==============estadillo=================")   
+                        for marcas_finales in estadillo_fem:
+                            f.write('\n'+ str (marcas_finales))
+                        f.write('\n' + str(max_fem))
+                        f.write("\n=======================================")
+                except:
+                    f.write("\n=============Fallo calculo femenino=============")
+                   
+        return render_template("estadillos.html", User_register=current_user)#, estadillo_fem = estadillo_fem, estadillo_masc = estadillo_masc, max_masc = max_masc, max_fem = max_fem)

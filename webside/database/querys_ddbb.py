@@ -349,7 +349,7 @@ def insert_test(tipo_test, test_date, repeticiones, marca, id):
     except:
         return False
 
-def get_mark_by_test(tipo_test, id):
+def get_mark_by_test(tipo_test:str, id:int):
     '''
         def 
             Get all marks by test and return all mark and the max 
