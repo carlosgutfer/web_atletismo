@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
+    content %}
+    <html>
+
+        <head>
+           <link rel="stylesheet" href="../CSS/mystyle.css">
+            <title>FILTRADO COCHES PARA JE Y JI </title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        </head>
+
+        <body>
+            <form method = "POST" >
+               <fieldset id="calculate">
+                <br>
+				<label for="pieceset_idname">Introduce los minutos </label>
+				<input type="text" class="form-control" id = "minutos" name = "minutos" value = 0 />
+				<br>
+				<label for="pieceset_idname">Introduce los segundos </label>
+				<input type="text" class="form-control" id = "segundos" name = "segundos" value = 0 />
+				<br>
+                <br>
+				<label for="pieceset_idname">Introduce las decimas </label>
+				<input type="text" class="form-control" id = "decimas" name = "decimas" value = 0 />
+				<br>
+                <br>
+				<label for="pieceset_idname">Introduce la distancia de la marca </label>
+				<input type="text" class="form-control" id = "current_mark" name = "current_mark" value = 0 />
+				<br>
+                <br>
+                <fieldset>
+                    <legend>Tipo calculo</legend>
+                      <input type="radio" id="distancia" name="tipo" value="Distancia" onchange="cambiarTipo()">
+                      <label for="distancia">Distancia</label>
+                      <input type="radio" id="porcentaje" name="tipo" value="Porcentaje" onchange="cambiarTipo()">
+                      <label for="porcentaje">Porcentaje</label>
+                </fieldset><br>
+                <br>
+                <br>
+				<label for="pieceset_idname" id = "lable_type">Introduce la distancia que quieres correr </label>
+				<input type="text" class="form-control" id = "goal_mark" name = "goal_mark" value = 0 />
+				<br>
+                <br>
+                <button class="btn btn-primary">CALCULAR</button>
+                <br>
+                <br>
+                {%if min or seg %}
+                <div class="border border-dark" style="padding: 20px;">
+                    <h1> RITMO OBJETIVO </h1>
+                    <p>{{min}}:{{seg}}</p>
+                {% endif %}
+
+            </div>
+	        </form>
+        </body>
+        <script>
+
+            function cambiarTipo() {
+            var tipoSeleccionado = document.querySelector('input[name="tipo"]:checked').value;
+            if (tipoSeleccionado) {
+                if (tipoSeleccionado == "Distancia") {
+                    document.getElementById("lable_type").innerHTML = "Introduce la distancia que quieres correr";
+                } else if (tipoSeleccionado == "Porcentaje") {
+                    document.getElementById("lable_type").innerHTML = "Introduce el porcentaje en formato decimal (ejem 80% = 1.2)";
+                }
+            }
+            
+            }
+            </script>
+    </html>
+
+
+    {% endblock %}

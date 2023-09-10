@@ -20,12 +20,14 @@ def create_app():
     from .test import test
     from .technification import technification
     from .moods import moods
+    from .calculadora import calculate
 
     app.register_blueprint(moods, url_prefix='/')
     app.register_blueprint(technification, url_prefix= '/')
     app.register_blueprint(views, url_prefix= '/')
     app.register_blueprint(marks, url_prefix='/')
     app.register_blueprint(test, url_prefix='/')
+    app.register_blueprint(calculate, url_prefix='/')
 
     create_database(app)
 
