@@ -56,7 +56,8 @@ def user_info():
             qdb.update_user(current_user, ruta)
             file.save(ruta)
             return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('\\')[-1])
-    return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('\\')[-1])
+    image = current_user.url_photo.split('\\')[-1]
+    return render_template("user_info.html", User_register=current_user, image = image)
 
 
 @views.route('/sing_up', methods=['POST', 'GET'])
