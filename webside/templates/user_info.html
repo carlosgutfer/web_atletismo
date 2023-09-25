@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}User info{% endblock %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <br><br>
+    <h1 align="center">Datos usuario</h1>
+    <br>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6">
+                <br>
+                <label for="firstName">{{User_register.name}}</label>
+                <br><br>
+                <label for="firstName">{{User_register.surname}}</label>
+                <br><br>
+                <label for="firstName">{{User_register.club}}</label>
+                <br><br>
+                <label for="firstName">{{User_register.anno_nacimiento}}</label>
+                <br>
+            </div>
+            <div class="col-md-6">
+                {% if image %}
+                <img src="{{ url_for('mostrar_imagen', nombre_archivo=image) }}" alt="{{ User_register.username }}"
+                    style="max-width: 300px; max-height: 300px;">
+                {% endif %}
+                <br>
+                <input type="file" name="file" accept="image/*">
+                <button type="submit" class="btn btn-primary">Modificar Foto</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

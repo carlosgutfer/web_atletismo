@@ -1,12 +1,19 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, current_app
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import  check_password_hash
 from .models.bbdd import User_register
 from . import db
 from .database import querys_ddbb as qdb
 from .estadillos import estadillo_sub16_masculino_al,estadillo_sub16_femenino_al
-views = Blueprint('views', __name__)
 import csv
+import os
+from werkzeug.utils import secure_filename
+
+
+views = Blueprint('views', __name__)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 @views.route('/', methods=['POST','GET'])
 def home():
@@ -28,6 +35,29 @@ def home():
     elif request.method == 'GET' and current_user.is_active:
         return render_template("home.html", User_register=current_user, data = qdb.get_notes() )
     return render_template("login.html", User_register=current_user)
+
+
+@views.route('/user_info', methods=['POST', 'GET'])
+@login_required
+def user_info():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return render_template("user_info.html", User_register=current_user, fail = True)
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return render_template("user_info.html", User_register=current_user, fail = True)
+
+        if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
+            filename = secure_filename(file.filename)
+            file.seek(0)
+            ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            qdb.update_user(current_user, ruta)
+            file.save(ruta)
+            return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('\\')[-1])
+    return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('\\')[-1])
+
 
 @views.route('/sing_up', methods=['POST', 'GET'])
 @login_required

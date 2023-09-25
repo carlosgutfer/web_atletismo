@@ -6,7 +6,7 @@ from collections import Counter
 from ..models.bbdd import Marca, User_register, test, Technification, Notes, test, Mood
 from .. import db 
 from sqlalchemy import or_
-import csv
+import os
 
 def calculate_rm(max):
     rm = []
@@ -234,6 +234,13 @@ def insert_user(name, password, admin, surname,club = 'Atletismo Leganes'):
 
 def update_password(usuario, password):
     setattr(usuario, 'password',generate_password_hash(password, method='sha256'))
+    db.session.commit()
+
+def update_user(usuario, url_photo):
+    all_marks = db.session.query(User_register).filter_by(id = usuario.id).all()
+    if os.path.exists(all_marks[0].url_photo):
+        os.remove(all_marks[0].url_photo)
+    usuario.url_photo = url_photo
     db.session.commit()
 
 def get_all_user():

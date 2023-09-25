@@ -11,6 +11,8 @@ class User_register(db.Model, UserMixin):
     sex = db.Column(db.String(1))
     admin = db.Column(db.Boolean)
     club = db.Column(db.String(150))
+    anno_nacimiento = db.Column(db.Integer)
+    url_photo = db.Column(db.String(500))
     marcas = db.relationship('Marca')
     test = db.relationship('test')
     group = db.relationship('Technification')
