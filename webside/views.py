@@ -50,7 +50,6 @@ def user_info():
             return render_template("user_info.html", User_register=current_user, fail = True)
 
         if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
-            file.filename =  file.filename .replace('/', '_')
             filename = secure_filename(file.filename)
             file.seek(0)
             ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
