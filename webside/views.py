@@ -56,7 +56,7 @@ def user_info():
             qdb.update_user(current_user, ruta)
             os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(ruta)
-            return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('\\')[-1])
+            return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('/')[-1])
     image = None
     if current_user.url_photo != None:
         image = current_user.url_photo.split('/')[-1]
