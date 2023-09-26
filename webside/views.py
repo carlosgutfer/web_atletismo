@@ -17,7 +17,7 @@ def allowed_file(filename):
 
 @views.route('/', methods=['POST','GET'])
 def home():
-    
+
     if request.method == 'POST':
         user_cod = request.form.get('user_cod')
         password = request.form.get('password')
@@ -54,6 +54,7 @@ def user_info():
             file.seek(0)
             ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             qdb.update_user(current_user, ruta)
+            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(ruta)
             return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('\\')[-1])
     image = None
@@ -140,7 +141,7 @@ def estadillos():
                     estadillo_masc, max_masc, final_marks =estadillo_sub16_masculino_al(marcas)
                     nombres_apellidos = [[mark[2] + mark[3], mark[1].disciplina] for mark in estadillo_masc]
                     for key,value in final_marks.items():
-                        f.write("\n" +str(key)) 
+                        f.write("\n" +str(key))
                         for marks in value:
                             nombre =  marks[2] + marks[3]
                             for x in nombres_apellidos:
@@ -148,7 +149,7 @@ def estadillos():
                                     f.write("\n" +str(marks) + " -- " + x[1])
                                     break
                                 elif x == nombres_apellidos[-1]:
-                                    f.write("\n" +str(marks))   
+                                    f.write("\n" +str(marks))
                     f.write("\n==============estadillo=================")
                     for marcas_finales in estadillo_masc:
                         f.write('\n' + str(marcas_finales))
@@ -157,7 +158,7 @@ def estadillos():
                         estadillo_fem,max_fem,final_marks =  estadillo_sub16_femenino_al(marcas)
                         nombres_apellidos = [[mark[2] + mark[3], mark[1].disciplina]for mark in estadillo_fem]
                         for key,value in final_marks.items():
-                            f.write("\n" +str(key)) 
+                            f.write("\n" +str(key))
                             for marks in value:
                                 nombre =  marks[2] + marks[3]
                                 for x in nombres_apellidos:
@@ -165,13 +166,13 @@ def estadillos():
                                         f.write("\n" +str(marks) + " -- " + x[1])
                                         break
                                     elif x == nombres_apellidos[-1]:
-                                        f.write("\n" +str(marks))   
-                        f.write("\n==============estadillo=================")   
+                                        f.write("\n" +str(marks))
+                        f.write("\n==============estadillo=================")
                         for marcas_finales in estadillo_fem:
                             f.write('\n'+ str (marcas_finales))
                         f.write('\n' + str(max_fem))
                         f.write("\n=======================================")
                 except:
                     f.write("\n=============Fallo calculo femenino=============")
-                   
+
         return render_template("estadillos.html", User_register=current_user)#, estadillo_fem = estadillo_fem, estadillo_masc = estadillo_masc, max_masc = max_masc, max_fem = max_fem)
