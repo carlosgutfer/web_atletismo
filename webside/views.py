@@ -51,8 +51,7 @@ def user_info():
 
         if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
             filename = secure_filename(file.filename)
-            if '/' in filename:
-                filename = filename[1:]
+            filename = filename.replace('/', '_')
             file.seek(0)
             ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             qdb.update_user(current_user, ruta)
