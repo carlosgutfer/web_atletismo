@@ -238,8 +238,9 @@ def update_password(usuario, password):
 
 def update_user(usuario, url_photo):
     all_marks = db.session.query(User_register).filter_by(id = usuario.id).all()
-    if os.path.exists(all_marks[0].url_photo):
-        os.remove(all_marks[0].url_photo)
+    if all_marks[0].url_photo != None:
+        if os.path.exists(all_marks[0].url_photo):
+            os.remove(all_marks[0].url_photo)
     usuario.url_photo = url_photo
     db.session.commit()
 
