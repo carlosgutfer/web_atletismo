@@ -14,7 +14,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=5)
     app.config['ALLOWED_EXTENSIONS'] =  {'png', 'jpg', 'jpeg'}
-    app.config['UPLOAD_FOLDER'] = './webside/images'
+    app.config['UPLOAD_FOLDER'] = './web_atletismo/webside/images'
     app.config['MAX_IMAGE_SIZE_BYTES'] = 5 * 1024 * 1024
     db.init_app(app)
 
