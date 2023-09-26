@@ -15,8 +15,13 @@
           <tbody>
             {% for x in all_user  %}
             <tr>
-              <td><img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('\\')[-1]) }}" alt="{{ User_register.username }}"
-                  style="max-width: 100px; max-height: 100px;"></td>
+              <td>
+                { %if x.url_photo != None %}
+                <img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('\\')[-1]) }}" alt="{{ User_register.username }}"
+                  style="max-width: 100px; max-height: 100px;">
+                { % endif% }
+                
+                </td>
                 <td>{{x.id}} </td>   
                 <td>{{x.name}}</td>
                 <td>{{x.surname}}</td>
