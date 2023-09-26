@@ -42,12 +42,12 @@ def home():
 def user_info():
     if request.method == 'POST':
         if 'file' not in request.files:
-            return render_template("user_info.html", User_register=current_user, fail = True)
+                return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('/')[-1])
 
         file = request.files['file']
 
         if file.filename == '':
-            return render_template("user_info.html", User_register=current_user, fail = True)
+            return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('/')[-1])
 
         if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
             filename = secure_filename(file.filename)
@@ -56,7 +56,7 @@ def user_info():
             qdb.update_user(current_user, ruta)
             os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
             file.save(ruta)
-            return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('\\')[-1])
+            return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('/')[-1])
     image = None
     if current_user.url_photo != None:
         image = current_user.url_photo.split('/')[-1]
