@@ -59,7 +59,7 @@ def user_info():
             return render_template("user_info.html", User_register=current_user, fail = False, image = current_user.url_photo.split('\\')[-1])
     image = None
     if current_user.url_photo != None:
-        image = current_user.url_photo.split('\\')[-1]
+        image = current_user.url_photo.split('/')[-1]
     return render_template("user_info.html", User_register=current_user, image = image)
 
 
