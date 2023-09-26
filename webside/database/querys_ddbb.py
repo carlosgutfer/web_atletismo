@@ -248,7 +248,7 @@ def get_all_user():
     '''
         Return all records from User table
     '''
-    return db.session.query(User_register.id, User_register.name, User_register.surname).order_by(User_register.name).all()
+    return db.session.query(User_register.id, User_register.name, User_register.surname, User_register.url_photo).order_by(User_register.name).all()
 
 
 """
