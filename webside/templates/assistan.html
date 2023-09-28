@@ -10,17 +10,15 @@
                    <br>
                    <input type="date" id = "sesion_date" name="sesion_date" />
                    <br><br>
-                   <select class="list-group" multiple id="ids" name = "ids">
+                   <select class="list-group" multiple id="ids" name = "ids" style="width: 300px; height: 200px;" >
                     <option>seleccion a todos</option>   
                     {% for x  in all_user: %} 
-                        {% if x.url_photo != None %}
-                        <option  value = "{{x.id}}">
-                            <img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('/')[-1]) }}" alt="{{ User_register.username }}" style="max-width: 100px; max-height: 100px;"> 
-                            {{x.name}} {{x.surname}}
-                            </option>
-                        {% else %}
-                            <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                    <option value="{{ x.id }}">
+                        {% if x.url_photo %}
+                            <img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('/')[-1]) }}" alt="{{ User_register.username }}">
                         {% endif %}
+                        {{ x.name }} {{ x.surname }}
+                        </option>
                     {% endfor %}
                     </select>
                    <br>
