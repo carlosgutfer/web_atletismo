@@ -236,13 +236,40 @@ def update_password(usuario, password):
     setattr(usuario, 'password',generate_password_hash(password, method='sha256'))
     db.session.commit()
 
-def update_user(usuario, url_photo):
+def update_user_photo(usuario, url_photo):
+    '''
+        def 
+            Update user photo
+        INPUT
+            USER --> STR\n
+            URL_PHOTO --> STR\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    setattr(usuario, 'url_photo',url_photo)
+    db.session.commit()
     all_marks = db.session.query(User_register).filter_by(id = usuario.id).all()
     if all_marks[0].url_photo != None:
         if os.path.exists(all_marks[0].url_photo):
             os.remove(all_marks[0].url_photo)
     usuario.url_photo = url_photo
     db.session.commit()
+
+def update_user_year(usuario, year):
+    '''
+        def 
+            Update user year
+        INPUT
+            USER --> STR\n
+            YEAR --> INT\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    usuario.anno_nacimiento = year
+    db.session.commit()
+
 
 def get_all_user():
     '''

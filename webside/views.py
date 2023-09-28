@@ -41,22 +41,20 @@ def home():
 @login_required
 def user_info():
     if request.method == 'POST':
-        if 'file' not in request.files:
-                return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('/')[-1])
-
-        file = request.files['file']
-
-        if file.filename == '':
-            return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('/')[-1])
-
-        if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
-            filename = secure_filename(file.filename)
-            file.seek(0)
-            ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-            qdb.update_user(current_user, ruta)
-            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-            file.save(ruta)
-            return render_template("user_info.html", User_register=current_user, image = current_user.url_photo.split('/')[-1])
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename != '':
+                if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
+                    filename = secure_filename(file.filename)
+                    file.seek(0)
+                    ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                    qdb.update_user(current_user, ruta)
+                    os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
+                    file.save(ruta)
+        if 'anno_nacimiento' in request.form:
+            anno_nacimiento = request.form.get('anno_nacimiento')
+            if anno_nacimiento.isdigit():
+                qdb.update_user_year(current_user, int(anno_nacimiento))
     image = None
     if current_user.url_photo != None:
         image = current_user.url_photo.split('/')[-1]
