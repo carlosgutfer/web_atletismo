@@ -24,6 +24,7 @@ def create_app():
     from .technification import technification
     from .moods import moods
     from .calculadora import calculate
+    from .asistant import assitant
 
     app.register_blueprint(moods, url_prefix='/')
     app.register_blueprint(technification, url_prefix= '/')
@@ -31,7 +32,7 @@ def create_app():
     app.register_blueprint(marks, url_prefix='/')
     app.register_blueprint(test, url_prefix='/')
     app.register_blueprint(calculate, url_prefix='/')
-
+    app.register_blueprint(assitant, url_prefix='/')
     create_database(app)
 
    

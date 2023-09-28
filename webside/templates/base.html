@@ -56,6 +56,7 @@
               <a class="dropdown-item" href="/delete_test">ELIMINAR MARCA DE TEST</a>
             </div>
           </li>
+          <!--
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
               ESTADO DE ANIMO
@@ -73,6 +74,7 @@
               <a class="dropdown-item" href="/change_pass">CAMBIAR CONTRASEÑA</a>
             </div>
           </li>  
+          !-->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
               ESTADILLOS
@@ -90,6 +92,15 @@
             </div>
           </li>
           {% if User_register.admin %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
+              ASISTENCIA
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/insert_asitant">PASAR LISTA</a>
+              <a class="dropdown-item" href="/insert_asitant">CONSULTAR ASISTENCIA</a>
+            </div>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px;">
               GRUPOS TECNIFICACIÓN

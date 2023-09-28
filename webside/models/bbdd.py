@@ -54,3 +54,7 @@ class  Mood(db.Model):
     week = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))
 
+class Assist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user_register.id'))

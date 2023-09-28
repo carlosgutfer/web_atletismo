@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+<html>
+    <body>
+        <form id="myform" >
+           <fieldset id="main">
+                   <br>
+                   <div class="form-group">		
+                   <br>
+                   <label for="pieceset_idname">Selecciona la fecha test </label>
+                   <br>
+                   <input type="date" id = "sesion_date" name="sesion_date" />
+                   <br><br>
+                   <select class="list-group" multiple id="ids" name = "ids">
+                    <option>seleccion a todos</option>   
+                    {% for x  in all_user: %} 
+                        {% if x.url_photo != None %}
+                        <option  value = "{{x.id}}">
+                            <img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('/')[-1]) }}" alt="{{ User_register.username }}" style="max-width: 100px; max-height: 100px;"> 
+                            {{x.name}} {{x.surname}}
+                            </option>
+                        {% else %}
+                            <option  value = "{{x.id}}">{{x.name}} {{x.surname}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                   <br>
+                   <label for="mark" id="informacion" name="informacion">Introduce la marca</label>
+                   <input type="text" class="form-control" id = "marca" name = "marca" value = 0 />
+                   <br>
+                   <button class="btn btn-primary">GUARDAR</button>
+                   </div>
+   
+       </form>
+                       
+    </body>
+{% endblock %}
