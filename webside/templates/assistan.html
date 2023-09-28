@@ -1,34 +1,75 @@
-{% extends "base.html" %}{% block title %}{% endblock %} {% block content%}
+{% extends "base.html" %}{% block title %}  ASISTENCIA {% endblock %} {% block content%}
 <html>
     <body>
-        <form id="myform" >
+        <form method="POST">
            <fieldset id="main">
-                   <br>
-                   <div class="form-group">		
-                   <br>
-                   <label for="pieceset_idname">Selecciona la fecha test </label>
-                   <br>
-                   <input type="date" id = "sesion_date" name="sesion_date" />
-                   <br><br>
-                   <select class="list-group" multiple id="ids" name = "ids" style="width: 300px; height: 200px;" >
-                    <option>seleccion a todos</option>   
-                    {% for x  in all_user: %} 
-                    <option value="{{ x.id }}">
-                        {% if x.url_photo %}
-                            <img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('/')[-1]) }}" alt="{{ User_register.username }}">
-                        {% endif %}
-                        {{ x.name }} {{ x.surname }}
-                        </option>
-                    {% endfor %}
-                    </select>
-                   <br>
-                   <label for="mark" id="informacion" name="informacion">Introduce la marca</label>
-                   <input type="text" class="form-control" id = "marca" name = "marca" value = 0 />
-                   <br>
-                   <button class="btn btn-primary">GUARDAR</button>
-                   </div>
-   
+            <br><br>
+            {% if tipo == 'insert' %}
+              <h1>Pasar asistencia</h1>
+            {% else %}
+              <h1> Revisar asistencia </h1>
+            {% endif %}
+            <br>
+            <div class="container">
+              <h3>Selecciona fecha</h3>
+              <input type="date" id="sesion_date" name="sesion_date" />
+            </div>
+            <br>
+            <table class="table " >
+                <thead class="thead-light">
+                  <tr>
+                   <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Asistencia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for x in all_user  %}
+                  <tr>
+                      <td>
+                      {% if x.url_photo != None %}
+      
+                      <img src="{{ url_for('mostrar_imagen', nombre_archivo=x.url_photo.split('/')[-1]) }}" alt="{{ User_register.username }}"
+                        style="max-width: 100px; max-height: 100px;">
+                      {% endif %}
+                       </td>
+      
+                      <td>{{x.name}}</td>
+                      <td>{{x.surname}}</td>
+                    {% if x.total_count %}
+                      <td>{{x.total_count}}</td>
+                    {% elif tipo == 'insert' %}
+                      <td><input type="checkbox" id = "{{x.id}}" name  = "{{x.id}}" /></td>
+                    {% else %}
+                       <td></td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+                <br>
+                {% if tipo == 'insert' %}
+                  <button class="btn btn-primary">GUARDAR</button>
+                {% else %}
+                  <button class="btn btn-primary">CONSULTAR</button>
+                {% endif %}
+                </div>
        </form>
                        
     </body>
+
+    <style>
+      .container {
+          text-align: left;
+      }
+  
+      h3 {
+          display: inline-block;
+      }
+  
+      #sesion_date {
+          display: inline-block;
+      }
+  </style>
 {% endblock %}

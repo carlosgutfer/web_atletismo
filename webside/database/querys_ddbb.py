@@ -3,7 +3,7 @@ from datetime import datetime
 import numpy as np
 from werkzeug.security import generate_password_hash
 from collections import Counter
-from ..models.bbdd import Marca, User_register, test, Technification, Notes, test, Mood
+from ..models.bbdd import Marca, User_register, test, Technification, Notes, test, Mood, Assist
 from .. import db 
 from sqlalchemy import or_
 import os
@@ -449,5 +449,58 @@ def view_all_moods(id):
     try:
         all_mods = Mood.query.filter_by(user_id = id).all()
         return all_mods
+    except:
+        return False
+
+
+def insert_assist(ids,week_day,year,number_week):
+    '''
+        def
+            Insert new record on assist table
+        INPUT
+            ids --> list\n
+            week_day --> str\n
+            year --> int\n
+            number_week --> int\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        for id in ids:
+            if id == 'sesion_date':
+                continue
+            else:
+                id = int(id)
+            assist = Assist(user_id = id, week_day = week_day, year = year, week_number = number_week)
+            db.session.add(assist)
+            db.session.commit()
+        return True
+    except:
+        return False
+
+def count_same_user_id_asist_by_week_and_year(week_number,year):
+    '''
+        def
+            Count all diferent user_id in the same week and year\n
+        INPUT
+            id --> int\n
+            week_number --> int\n
+            year --> int\n
+        OUTPUT
+            TRUE --> SUCCESFULL\n
+            FALSE --> SOMETHING IS WRONG
+    '''
+    try:
+        result = db.session.query(
+            User_register.name,
+            User_register.surname,
+            User_register.url_photo,
+            db.func.count().label('total_count')
+        ).join(Assist, User_register.id == Assist.user_id).filter(
+            Assist.week_number == week_number,
+            Assist.year == year
+        ).group_by(User_register.name, User_register.surname).all()
+        return result
     except:
         return False
