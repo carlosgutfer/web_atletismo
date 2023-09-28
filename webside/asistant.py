@@ -10,13 +10,16 @@ def inser_assitant():
     all_user = qdb.get_all_user()
     if request.method == 'POST':
         if 'sesion_date' in request.form and len(request.form.keys()) > 1:
-            fecha = request.form.get('sesion_date')
-            fecha_obj = datetime.strptime(fecha, '%Y-%m-%d')
-            week_day = fecha_obj.strftime('%A')
-            year = int(fecha_obj.year)
-            number_week = int(fecha_obj.strftime('%W'))
-            ids = request.form.keys()
-            qdb.insert_assist(ids, week_day, year, number_week)
+            try:
+                fecha = request.form.get('sesion_date')
+                fecha_obj = datetime.strptime(fecha, '%Y-%m-%d')
+                week_day = fecha_obj.strftime('%A')
+                year = int(fecha_obj.year)
+                number_week = int(fecha_obj.strftime('%W'))
+                ids = request.form.keys()
+                qdb.insert_assist(ids, week_day, year, number_week)
+            except:
+                pass
     return render_template('assistan.html', User_register=current_user, all_user = all_user, tipo = 'insert')
 
 @assitant.route('/view_assitant', methods=['GET', 'POST'])
