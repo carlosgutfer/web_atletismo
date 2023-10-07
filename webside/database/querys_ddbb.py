@@ -247,8 +247,6 @@ def update_user_photo(usuario, url_photo):
             TRUE --> SUCCESFULL\n
             FALSE --> SOMETHING IS WRONG
     '''
-    setattr(usuario, 'url_photo',url_photo)
-    db.session.commit()
     all_marks = db.session.query(User_register).filter_by(id = usuario.id).all()
     if all_marks[0].url_photo != None:
         if os.path.exists(all_marks[0].url_photo):

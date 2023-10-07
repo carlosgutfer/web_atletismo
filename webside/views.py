@@ -46,7 +46,7 @@ def user_info():
             file = request.files['file']
             if file.filename != '':
                 if len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
-                    file = cv2.resize(cv2.imread(file.stream), (200, 200), interpolation=cv2.INTER_AREA)
+                    file = cv2.resize(cv2.imread(file.stream), (100, 100), interpolation=cv2.INTER_AREA)
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.seek(0)
