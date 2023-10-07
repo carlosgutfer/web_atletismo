@@ -48,7 +48,7 @@ def user_info():
                     filename = secure_filename(file.filename)
                     file.seek(0)
                     ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-                    qdb.update_user(current_user, ruta)
+                    qdb.update_user_photo(current_user, ruta)
                     os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
                     file.save(ruta)
         if 'anno_nacimiento' in request.form:
