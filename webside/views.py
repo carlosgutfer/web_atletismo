@@ -7,6 +7,7 @@ from .database import querys_ddbb as qdb
 from .estadillos import estadillo_sub16_masculino_al,estadillo_sub16_femenino_al
 import csv
 import os
+import cv2
 from werkzeug.utils import secure_filename
 
 
@@ -44,7 +45,9 @@ def user_info():
         if 'file' in request.files:
             file = request.files['file']
             if file.filename != '':
-                if file and allowed_file(file.filename) and  len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
+                if len(file.read()) < current_app.config['MAX_IMAGE_SIZE_BYTES']:
+                    file = cv2.resize(cv2.imread(file.stream), (200, 200), interpolation=cv2.INTER_AREA)
+                if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
                     file.seek(0)
                     ruta = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
